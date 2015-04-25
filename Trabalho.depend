@@ -34,3 +34,47 @@
 	"util.h"
 	<stdbool.h>
 
+1429984281 source:c:\users\casa\trabalho_ord\trabalho\arquivo.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"arquivo.h"
+	"util.h"
+	"indice.h"
+
+1429984080 c:\users\casa\trabalho_ord\trabalho\arquivo.h
+	"util.h"
+	<stdbool.h>
+
+1429917994 c:\users\casa\trabalho_ord\trabalho\util.h
+
+1429917574 c:\users\casa\trabalho_ord\trabalho\indice.h
+
+1429917625 source:c:\users\casa\trabalho_ord\trabalho\indice.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"indice.h"
+
+1429632245 source:c:\users\casa\trabalho_ord\trabalho\util.c
+	<stdio.h>
+	"util.h"
+
+1429983710 source:c:\users\casa\trabalho_ord\trabalho\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"util.h"
+	"indice.h"
+	"arquivo.h"
+
+1429986125 source:c:\users\casa\trabalho_ord\trabalho\busca.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"arquivo.h"
+	"util.h"
+	"indice.h"
+

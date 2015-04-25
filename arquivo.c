@@ -15,6 +15,13 @@ Indice ip1;
 Indice is2;
 Indice ip3;
 
+char* lerIndice(char* conteudo){
+    char *campo = malloc(MAX_CAMPO * sizeof(char));
+    //fgets(campo, MAX_CAMPO, arq);
+    campo[strlen(campo) - 1] = '\0';
+    campo = strtok(conteudo, " ");
+    return campo;
+}
 
 bool fimArquivo(FILE* arq){
     int offset = ftell(arq);
@@ -52,6 +59,7 @@ char* lerCampo(FILE* arq){
 }
 
 void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* campo[], int byteOffset, int i)){
+
     char* campo[4];
     char buffer[MAX_REG + 1] = "";
     short tam_reg = 0;
@@ -83,4 +91,44 @@ void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* cam
         i++;
     }
 
+}
+
+void importarArq(){
+    FILE* arquivo;
+    FILE* convertido;
+    char nomeArquivo[20];
+    int op = 0;
+
+    printf("Digite o nome do arquivo: ");
+    gets(nomeArquivo);
+
+    printf("\nSelecione o tipo do arquivo\n");
+    printf("(1) - Racas\n");
+    printf("(2) - Individuos\n");
+    printf("\nDigite sua opcao: ");
+    scanf("%d", &op);
+    limpar_stdin();
+
+    arquivo = abrirArquivo(nomeArquivo, "r");
+    if (op == 2){
+        convertido = abrirArquivo("convertidoIndividuo.txt", "w");
+    } else if (op == 1){
+        convertido = abrirArquivo("convertidoRacas.txt", "w");
+    }
+
+    switch(op){
+        case 1:
+            //cria indices primario e secundario com lista invertida
+        break;
+        case 2:
+            //cria indice primario
+            converterArquivo(arquivo, convertido, lerRegIndiceIndividuos);
+            criaArqIndice(ip3, "ip3.txt");
+        break;
+    }
+
+    //INDICES
+
+    fclose(arquivo);
+    fclose(convertido);
 }
