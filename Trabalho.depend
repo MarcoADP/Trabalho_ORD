@@ -1,0 +1,36 @@
+# depslib dependency file v1.0
+1429917625 source:c:\users\casa\desktop\trabalho\indice.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"indice.h"
+
+1429917574 c:\users\casa\desktop\trabalho\indice.h
+
+1429924345 source:c:\users\casa\desktop\trabalho\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"util.h"
+	"indice.h"
+	"arquivo.h"
+
+1429917994 c:\users\casa\desktop\trabalho\util.h
+
+1429632245 source:c:\users\casa\desktop\trabalho\util.c
+	<stdio.h>
+	"util.h"
+
+1429924347 source:c:\users\casa\desktop\trabalho\arquivo.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"arquivo.h"
+	"util.h"
+	"indice.h"
+
+1429917992 c:\users\casa\desktop\trabalho\arquivo.h
+	"util.h"
+	<stdbool.h>
+
