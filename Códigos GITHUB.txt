@@ -1,1 +1,6 @@
-a
+git init - iniciar
+git status - como está?
+git add <oque> - sem <>
+git commit -m "Mensagem" - com ""
+git remote add origin git@github.com:MarcoADP/NOME.git
+git push origin master

@@ -17,7 +17,7 @@ Indice ip1;
 Indice is2;
 Indice ip3;
 
-/*Testando!!!*/
+/*Testando!!! ok?*/ 
 
 void importarArq(){
     FILE* arquivo;
