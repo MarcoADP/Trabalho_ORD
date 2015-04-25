@@ -15,12 +15,8 @@ Indice ip1;
 Indice is2;
 Indice ip3;
 
-char* lerIndice(char* conteudo){
-    char *campo = malloc(MAX_CAMPO * sizeof(char));
-    //fgets(campo, MAX_CAMPO, arq);
-    campo[strlen(campo) - 1] = '\0';
-    campo = strtok(conteudo, " ");
-    return campo;
+char* lerByte(){
+
 }
 
 bool fimArquivo(FILE* arq){
@@ -65,12 +61,13 @@ void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* cam
     short tam_reg = 0;
     int byteOffset = 0;
     int i = 0;
+    int j;
 
     while(!fimArquivo(entrada)){
         strcpy(buffer, ""); //Zera o buffer
         tam_reg = 0;
 
-        int j;
+
         for (j = 0; j < NUM_CAMPO_REG; ++j){
             campo[j] = lerCampo(entrada);
             strcat(buffer, campo[j]);

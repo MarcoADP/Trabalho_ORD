@@ -12,7 +12,9 @@ char* buscaIndividuo(){
     int id_escolhido;
     int id;
     int referencia;
-    char* campo[2];
+    char* campo[4];
+    char* resultado;
+    int j = 0;
 
     printf("\nDigite o ID do INDIVIDUO: ");
     scanf("%d", &id_escolhido);
@@ -24,13 +26,33 @@ char* buscaIndividuo(){
         if(id_escolhido == id){
             printf("ID: %d\n", id);
             printf("REFERENCIA: %d\n\n", referencia);
-            return "ID ENCONTRADO!";
+            fseek(convertido, referencia+2, SEEK_SET);
 
+            /*for (j = 0; j < 4; j++){
+                campo[j] = lerCampo(convertido);
+                printf("CAMPO: %s\n", campo[j]);
+            }*/
+            resultado = lerCampo(convertido);
+
+            while(j<4){
+                if (j == 0){
+                    campo[0] = (char*)strtok(resultado, "|");
+                } else {
+                    campo[j] = (char*)strtok(NULL, "|");
+                }
+                j++;
+            }
+            printf("%s\n", campo[0]);
+            printf("%s\n", campo[1]);
+            printf("%s\n", campo[2]);
+            printf("%s\n", campo[3]);
+
+            return;
         }
     }
     fclose(convertido);
     fclose(indice);
-    return "Individuo não encontrado!";
+    return "Individuo nao encontrado!";
 
 }
 
@@ -48,7 +70,7 @@ void busca(){
 
     switch(op){
         case 1:
-            printf("%s\n",buscaIndividuo());
+            printf("%s\n", buscaIndividuo());
         break;
         case 2:
             //Buscar através de ip1

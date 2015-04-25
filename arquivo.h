@@ -3,7 +3,6 @@
 #include "util.h"
 #include <stdbool.h>
 
-char* lerIndice(char* conteudo);
 
 bool fimArquivo(FILE* arq);
 

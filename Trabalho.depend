@@ -34,7 +34,7 @@
 	"util.h"
 	<stdbool.h>
 
-1429984281 source:c:\users\casa\trabalho_ord\trabalho\arquivo.c
+1429987352 source:c:\users\casa\trabalho_ord\trabalho\arquivo.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -43,7 +43,7 @@
 	"util.h"
 	"indice.h"
 
-1429984080 c:\users\casa\trabalho_ord\trabalho\arquivo.h
+1429986566 c:\users\casa\trabalho_ord\trabalho\arquivo.h
 	"util.h"
 	<stdbool.h>
 
@@ -69,7 +69,7 @@
 	"indice.h"
 	"arquivo.h"
 
-1429986125 source:c:\users\casa\trabalho_ord\trabalho\busca.c
+1429988337 source:c:\users\casa\trabalho_ord\trabalho\busca.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
