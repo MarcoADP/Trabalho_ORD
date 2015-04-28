@@ -91,39 +91,39 @@
 	"util.h"
 	<stdbool.h>
 
-1430156854 d:\marco\ord\trabalho1\util.h
-
-1430156854 d:\marco\ord\trabalho1\indice.h
-
-1430158827 source:d:\marco\ord\trabalho1\busca.c
-	<stdio.h>
-	<stdlib.h>
-	<string.h>
+1429990564 d:\marco\ord\trabalho1\util.h
 	<stdbool.h>
-	"arquivo.h"
-	"util.h"
-	"indice.h"
 
-1430156854 source:d:\marco\ord\trabalho1\indice.c
+1430163976 d:\marco\ord\trabalho1\indice.h
+	"util.h"
+
+1430247828 source:d:\marco\ord\trabalho1\busca.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
-	"indice.h"
+	"busca.h"
+	"util.h"
 
-1430159240 source:d:\marco\ord\trabalho1\main.c
+1430187118 source:d:\marco\ord\trabalho1\indice.c
+	<stdio.h>
+	<stdlib.h>
+	"indice.h"
+	"arquivos.h"
+
+1430248662 source:d:\marco\ord\trabalho1\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"util.h"
 	"indice.h"
-	"arquivo.h"
-	"inserir.h"
+	"arquivos.h"
+	"busca.h"
 
-1430156854 source:d:\marco\ord\trabalho1\util.c
+1429643044 source:d:\marco\ord\trabalho1\util.c
 	<stdio.h>
 	"util.h"
 
-1430162508 source:d:\marco\ord\trabalho1\inserir.c
+1430247736 source:d:\marco\ord\trabalho1\inserir.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -133,13 +133,7 @@
 	"indice.h"
 	"busca.h"
 
-1430158746 d:\marco\ord\trabalho1\busca.h
-	<stdio.h>
-	<stdlib.h>
-	<string.h>
-	<stdbool.h>
-	"arquivo.h"
-	"util.h"
+1430245175 d:\marco\ord\trabalho1\busca.h
 	"indice.h"
 
 1430158342 d:\marco\ord\trabalho1\inserir.h
@@ -150,4 +144,12 @@
 	"arquivo.h"
 	"util.h"
 	"indice.h"
+
+1430164126 source:d:\marco\ord\trabalho1\arquivos.c
+	<stdio.h>
+	<stdlib.h>
+	"arquivos.h"
+
+1430186588 d:\marco\ord\trabalho1\arquivos.h
+	"util.h"
 

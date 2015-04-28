@@ -1,13 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "arquivo.h"
-#include "util.h"
+#ifndef BUSCA_H
+#define BUSCA_H
+
 #include "indice.h"
 
+int buscaBinaria(Indice ind, int chave);
 
-void busca();
+void menuBusca();
 
-
-bool buscaIndividuo();
+#endif
