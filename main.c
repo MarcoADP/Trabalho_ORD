@@ -4,6 +4,7 @@
 #include "util.h"
 #include "indice.h"
 #include "arquivo.h"
+#include "inserir.h"
 
 /*#define DELIM "|"
 #define MAX_CAMPO 50
@@ -37,7 +38,7 @@ void menu(){
             importarArq();
         break;
         case 2:
-
+            inserirIndividuo();
         break;
         case 3:
             busca();

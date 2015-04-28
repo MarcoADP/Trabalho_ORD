@@ -6,8 +6,4 @@
 #include "util.h"
 #include "indice.h"
 
-
-void busca();
-
-
-bool buscaIndividuo();
+void inserirIndividuo();

@@ -6,19 +6,15 @@
 #include "util.h"
 #include "indice.h"
 
-char* buscaIndividuo(){
+bool buscaIndividuo(int id_escolhido){
     FILE* convertido = fopen("convertidoIndividuo.txt","r");
     FILE* indice = fopen("ip3.txt","r");
-    int id_escolhido;
     int id;
     int referencia;
     char* campo[4];
     char* resultado;
     int j = 0;
 
-    printf("\nDigite o ID do INDIVIDUO: ");
-    scanf("%d", &id_escolhido);
-    limpar_stdin();
 
     while(!fimArquivo(indice)){
         fscanf(indice,"%d %d \n", &id, &referencia);
@@ -47,16 +43,18 @@ char* buscaIndividuo(){
             printf("%s\n", campo[2]);
             printf("%s\n", campo[3]);
 
-            return;
+            return true;
         }
     }
     fclose(convertido);
     fclose(indice);
-    return "Individuo nao encontrado!";
+    return false;
 
 }
 
+
 void busca(){
+    int id_escolhido;
     int op = 0;
     printf("\nSelecione o tipo da busca\n");
     printf("(1) - Buscar INDIVIDUOS pelo seu ID\n");
@@ -70,7 +68,12 @@ void busca(){
 
     switch(op){
         case 1:
-            printf("%s\n", buscaIndividuo());
+            printf("\nDigite o ID do INDIVIDUO: ");
+            scanf("%d", &id_escolhido);
+            limpar_stdin();
+
+            if(!buscaIndividuo(id_escolhido))
+                printf("Nao encontrado!\n");
         break;
         case 2:
             //Buscar através de ip1
