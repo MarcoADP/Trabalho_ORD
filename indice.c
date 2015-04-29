@@ -38,6 +38,22 @@ void qsort_indice(Indice *ind){
     quicksort(ind->reg, 0, ind->tam - 1);
 }
 
+int buscab_indice(RegIndice reg_indice[], int chave, int esquerda, int direita){
+    if (esquerda >= direita)
+        return -1;
+    int meio = (esquerda + direita)/2;
+    if (chave == reg_indice[meio].chave)
+        return meio;
+    if (chave > reg_indice[meio].chave)
+        return buscab_indice(reg_indice, chave, meio + 1, direita);
+    else //if (chave < reg_indice[meio].chave)
+        return buscab_indice(reg_indice, chave, esquerda, meio);
+}
+
+int buscaBinaria(Indice ind, int chave){
+    return buscab_indice(ind.reg, chave, 0, ind.tam);
+}
+
 void criaArqIndice(Indice ind, char nomeArquivo[], int tipo){
     FILE* arqIndice;
     int i;

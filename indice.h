@@ -1,7 +1,7 @@
 #ifndef INDICE_H
 #define INDICE_H
 
-#include "util.h"
+#include <stdbool.h>
 
 #define MAX_REG_INDICE 100
 #define MAX_REG_LISTA 100
@@ -39,6 +39,7 @@ struct lista_invertida {
 
 void criaArqIndice(Indice ind, char nomeArquivo[], int tipo);
 void qsort_indice(Indice *ind);
+int buscaBinaria(Indice ind, int chave);
 bool inserirListaI(ListaI* lista, int chave, int chave_sec);
 void criaArqListaI(ListaI lista, char nomeArquivo[]);
 int atribuiRRN(ListaI lista, int chave);
