@@ -23,7 +23,5 @@ FILE* abrirArquivo(char nomeArquivo[], char modo[]){
         return NULL;
     }
 
-    printf("\nArquivo %s aberto com sucesso.\n", nomeArquivo);
-
     return arq;
 }

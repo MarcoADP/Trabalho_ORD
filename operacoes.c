@@ -7,9 +7,7 @@
 #include "arquivos.h"
 
 #define DELIM "|"
-#define MAX_CAMPO 50
 #define MAX_TAM_REG 512
-#define NUM_CAMPO_REG 4
 
 Indice ip1;
 Indice is2;
@@ -68,7 +66,6 @@ void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* cam
 
         fwrite(&tam_reg, sizeof(tam_reg), 1, saida);
         fwrite(buffer, tam_reg, 1, saida);
-        printf("%d -- %s\n", tam_reg, buffer);
 
         lerRegIndice(campo, byteOffset);
 
@@ -79,7 +76,7 @@ void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* cam
     }
 }
 
-void importarArq(){
+bool importarArq(){
     FILE* arquivoIndividuos, *arquivoRacas, *convertidoIndividuos, *convertidoRacas;
     char nomeArquivoInd[20];
     char nomeArquivoRacas[20];
@@ -88,7 +85,7 @@ void importarArq(){
         printf("\nDigite o nome do arquivo de INDIVIDUOS ou 0 para cancelar: ");
         gets(nomeArquivoInd);
         if (strcmp(nomeArquivoInd, "0") == 0)
-            return;
+            return false;
         arquivoIndividuos = abrirArquivo(nomeArquivoInd, "r");
     } while (arquivoIndividuos == NULL);
 
@@ -96,12 +93,12 @@ void importarArq(){
         printf("\nDigite o nome do arquivo de RACAS ou 0 para cancelar: ");
         gets(nomeArquivoRacas);
         if (strcmp(nomeArquivoRacas, "0") == 0)
-            return;
+            return false;
         arquivoRacas = abrirArquivo(nomeArquivoRacas, "r");
     } while (arquivoRacas == NULL);
 
-    convertidoIndividuos = abrirArquivo("convertidoIndividuos.txt", "w");
-    convertidoRacas = abrirArquivo("convertidoRacas.txt", "w");
+    convertidoIndividuos = abrirArquivo(NOME_ARQ_IND, "w");
+    convertidoRacas = abrirArquivo(NOME_ARQ_RACAS, "w");
 
     converterArquivo(arquivoIndividuos, convertidoIndividuos, lerRegIndiceIndividuos);
     converterArquivo(arquivoRacas, convertidoRacas, lerRegIndiceRacas);
@@ -120,90 +117,113 @@ void importarArq(){
     fclose(arquivoRacas);
     fclose(convertidoIndividuos);
     fclose(convertidoRacas);
+
+    return true;
 }
 
-void inserirIndividuo(){
+bool inserirIndividuo(){
     FILE* arquivo;
-    int id;
-    int raca;
+    int idi;
+    int idr;
     short tam_reg;
     char campo[MAX_CAMPO];
     char buffer[MAX_TAM_REG + 1] = "";
 
-    printf("Tela de cadastro de cachorros!\n\n");
-    printf("Digite o id do Cachorro: ");
-    scanf("%d", &id);
-    limpar_stdin();
+    printf("\nTela de cadastro de cachorros:\n\n");
+    
+    idi = lerInt("Digite o ID do Cachorro ou 0 para cancelar: ");
+    if (idi == 0)
+        return false;
+    while(buscaBinaria(ip3, idi) > -1){
+        printf("ERRO: O ID ja existe!\n");
+        idi = lerInt("Digite outro ID ou 0 para cancelar: ");
+        if (idi == 0)
+            return false;
+    }
+    
+    itoa(idi, campo, 10);
+    strcat(buffer, campo);
+    strcat(buffer, DELIM);
+    campo[0] = '\0';
 
-    while(buscaBinaria(ip3, id) > -1){
-        printf("Id existente! \nDigite outro id: ");
-        scanf("%d", &id);
-        limpar_stdin();
-
+    idr = lerInt("Digite o ID da raca ou 0 para cancelar: ");
+    if (idr == 0)
+        return false;
+    while(buscaBinaria(ip1, idr) == -1){
+        printf("ERRO: Nao existe raca com esse id!\n");
+        idr = lerInt("Digite o ID da raca ou 0 para cancelar: ");
+        if (idr == 0)
+            return false;
     }
 
-    itoa(id, campo, 10);
+    itoa(idr, campo, 10);
     strcat(buffer, campo);
     strcat(buffer, DELIM);
     campo[0] = '\0';
 
-    printf("Digite o ID da raca: ");
-    scanf("%d", &raca);
-    limpar_stdin();
-    while(buscaBinaria(ip1, raca) == -1){
-        printf("Nao existe raca com esse id!\n");
-        printf("Digite o ID da raca: ");
-        scanf("%d", &raca);
-        limpar_stdin();
-    }
-
-    itoa(raca, campo, 10);
-    strcat(buffer, campo);
-    strcat(buffer, DELIM);
-    campo[0] = '\0';
-
-    printf("Digite o nome do Cachorro: ");
-    //gets(nome);
-    scanf("%s", campo);
-    limpar_stdin();
-    strcat(buffer, campo);
-    strcat(buffer, DELIM);
-    campo[0] = '\0';
-
-
-    printf("Digite o sexo do Cachorro: ");
+    printf("Digite o nome do cachorro ou 0 para cancelar: ");
     gets(campo);
+    if (strcmp(campo, "0") == 0)
+        return false;
     strcat(buffer, campo);
     strcat(buffer, DELIM);
     campo[0] = '\0';
 
-    arquivo = fopen("convertidoIndividuos.txt", "a");
-    printf("\nAbriu\n");
+    printf("Digite o sexo do cachorro ou 0 para cancelar: ");
+    gets(campo);
+    if (strcmp(campo, "0") == 0)
+        return false;
+    strcat(buffer, campo);
+    strcat(buffer, DELIM);
+    campo[0] = '\0';
+
+    //VERIFICAR SE ARQUIVO EXISTE
+    arquivo = fopen(NOME_ARQ_IND, "a");
 
     tam_reg = strlen(buffer);
 
-    fwrite(&tam_reg, 1, sizeof(tam_reg), arquivo);
-    fwrite(buffer, 1, tam_reg, arquivo);
+    fwrite(&tam_reg, sizeof(tam_reg), 1, arquivo);
+    fwrite(buffer, tam_reg, 1, arquivo);
     fclose(arquivo);
+
+    //ATUALIZAR INDICES E LISTA INVERTIDA
+
+    return true;
 }
 
-void buscaID(Indice ip, char nomeArquivo[]){
+void transformaBuffer(char buffer[], char* campoRetorno[]){
+    int i;
+    campoRetorno[0] = strtok(buffer, DELIM);
+    for (i = 1; i < NUM_CAMPO_REG ; ++i)
+        campoRetorno[i] = strtok(NULL, DELIM);
+}
+
+bool buscaID(Indice ip, char nomeArquivo[], char* campoRetorno[]){
     FILE* arquivo;
     int id;
     int posicao;
     short tam_reg;
-    char buffer[MAX_TAM_REG];
+    char buffer[MAX_TAM_REG] = "";
 
-    printf("Digite o ID: ");
-    scanf("%d", &id);
-    limpar_stdin();
-
+    id = lerInt("Digite o ID ou 0 para cancelar: ");
+    if (id == 0)
+        return false;
     posicao = buscaBinaria(ip, id);
+
+    while (posicao == -1){
+        printf("\nERRO: ID nao existe.\n");
+        id = lerInt("\nDigite o ID ou 0 para cancelar: ");
+        if (id == 0)
+            return false;
+        posicao = buscaBinaria(ip, id);
+    }
+
     arquivo = abrirArquivo(nomeArquivo, "r");
 
     fseek(arquivo, ip.reg[posicao].offset, SEEK_SET);
-    fread(&tam_reg, 1, sizeof(tam_reg), arquivo);
-    fread(buffer, 1, tam_reg, arquivo);
+    fread(&tam_reg, sizeof(tam_reg), 1, arquivo);
+    fread(buffer, tam_reg, 1, arquivo);
 
-    printf("%s\n", buffer);
+    transformaBuffer(buffer, campoRetorno);
+    return true;
 }

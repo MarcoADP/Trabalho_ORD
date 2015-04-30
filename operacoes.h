@@ -3,14 +3,20 @@
 
 #include "indice.h"
 
+#define MAX_CAMPO 50
+#define NUM_CAMPO_REG 4
+
+#define NOME_ARQ_IND "convertidoIndividuos.txt"
+#define NOME_ARQ_RACAS "convertidoRacas.txt"
+
 extern Indice ip1;
 extern Indice is2;
 extern Indice ip3;
 extern ListaI listaIP1;
 extern ListaI listaIS2;
 
-void buscaID(Indice ip, char nomeArquivo[]);
-void importarArq();
-void inserirIndividuo();
+bool buscaID(Indice ip, char nomeArquivo[], char* campoRetorno[]);
+bool importarArq();
+bool inserirIndividuo();
 
 #endif

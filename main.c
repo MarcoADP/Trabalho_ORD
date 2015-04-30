@@ -4,25 +4,47 @@
 #include "util.h"
 
 void menuBusca(){
+    char* campoRetorno[NUM_CAMPO_REG];
     int op;
+    clrscr();
     do {
-        printf("\nSelecione o tipo da busca\n");
+        printf("\nSelecione o tipo da busca:\n");
         printf("(1) - Buscar INDIVIDUOS pelo seu ID\n");
         printf("(2) - Buscar RACA pelo ID da raca\n");
         printf("(3) - Buscar RACAS pertencentes a um grupo\n");
         printf("(4) - Buscar INDIVIDUOS pertencentes a uma raca\n");
         printf("(5) - Buscar INDIVIDUOS pertencentes a uma raca e determinado sexo\n");
         printf("(6) - Voltar para o menu principal\n");
-        printf("\nDigite sua opcao: ");
-        scanf("%d", &op);
-        limpar_stdin();
+        op = lerInt("\nDigite sua opcao: ");
 
         switch(op){
             case 1:
-                buscaID(ip3, "convertidoIndividuos.txt");
+                if (buscaID(ip3, NOME_ARQ_IND, campoRetorno)){
+                    clrscr();
+                    printf("RESULTADO DA BUSCA:\n");
+                    printf("ID-I: %s\n", campoRetorno[0]);
+                    printf("ID-R: %s\n", campoRetorno[1]);
+                    printf("NOME: %s\n", campoRetorno[2]);
+                    printf("SEXO: %s\n", campoRetorno[3]);
+                }
+                else {
+                    clrscr();
+                    printf("Busca cancelada.\n");
+                }
                 break;
             case 2:
-                buscaID(ip1, "convertidoRacas.txt");
+                if (buscaID(ip1, NOME_ARQ_RACAS, campoRetorno)) {
+                    clrscr();
+                    printf("RESULTADO DA BUSCA:\n");
+                    printf("ID-R: %s\n", campoRetorno[0]);
+                    printf("RACA: %s\n", campoRetorno[1]);
+                    printf("ID-G: %s\n", campoRetorno[2]);
+                    printf("GRUPO: %s\n", campoRetorno[3]);
+                }
+                else {
+                    clrscr();
+                    printf("Busca cancelada.\n");
+                }
                 break;
             case 3:
                 //Buscar através da lista invertida + is2
@@ -36,40 +58,54 @@ void menuBusca(){
             case 6:
                 break;
             default:
-                system("cls");
-                printf("\nERRO: Opcao invalida\n");
+                clrscr();
+                printf("ERRO: Opcao invalida\n");
         }
     } while (op != 6);
 }
 
 void menu(){
     int op;
+    clrscr();
 
     //mostrar titulo
     do {
-        printf("(1) - Importar arquivo\n");
+        printf("\n(1) - Importar arquivo\n");
         printf("(2) - Inserir individuo\n");
         printf("(3) - Buscar\n");
         printf("(4) - Sair\n");
-        printf("\nDigite sua opcao: ");
-        scanf("%d", &op);
-        limpar_stdin();
+        op = lerInt("\nDigite sua opcao: ");
 
         switch(op){
             case 1:
-                importarArq();
+                if (importarArq()){
+                    clrscr();
+                    printf("Arquivos importados e convertidos com sucesso.\n");
+                }
+                else {
+                    clrscr();
+                    printf("Importacao cancelada.\n");
+                }
                 break;
             case 2:
-                inserirIndividuo();
+                if (inserirIndividuo()){
+                    clrscr();
+                    printf("Individuo inserido com sucesso.\n");
+                }
+                else {
+                    clrscr();
+                    printf("Insercao cancelada.\n");
+                }
                 break;
             case 3:
                 menuBusca();
+                clrscr();
                 break;
             case 4:
                 break;
             default:
-                system("cls");
-                printf("\nERRO: Opcao invalida\n");
+                clrscr();
+                printf("ERRO: Opcao invalida\n");
         }
     } while (op != 4);
 }
