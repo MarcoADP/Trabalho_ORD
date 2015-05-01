@@ -47,27 +47,27 @@
 	"util.h"
 	<stdbool.h>
 
-1429917994 c:\users\casa\trabalho_ord\trabalho\util.h
+1430501555 c:\users\casa\trabalho_ord\trabalho\util.h
 
-1429917574 c:\users\casa\trabalho_ord\trabalho\indice.h
+1430502087 c:\users\casa\trabalho_ord\trabalho\indice.h
+	<stdbool.h>
 
-1429917625 source:c:\users\casa\trabalho_ord\trabalho\indice.c
+1430501555 source:c:\users\casa\trabalho_ord\trabalho\indice.c
 	<stdio.h>
 	<stdlib.h>
-	<string.h>
 	"indice.h"
+	"arquivos.h"
 
-1429632245 source:c:\users\casa\trabalho_ord\trabalho\util.c
+1430501555 source:c:\users\casa\trabalho_ord\trabalho\util.c
 	<stdio.h>
 	"util.h"
 
-1429983710 source:c:\users\casa\trabalho_ord\trabalho\main.c
+1430501555 source:c:\users\casa\trabalho_ord\trabalho\main.c
 	<stdio.h>
 	<stdlib.h>
-	<string.h>
+	"operacoes.h"
 	"util.h"
-	"indice.h"
-	"arquivo.h"
+	"arquivos.h"
 
 1429988337 source:c:\users\casa\trabalho_ord\trabalho\busca.c
 	<stdio.h>
@@ -76,5 +76,102 @@
 	<stdbool.h>
 	"arquivo.h"
 	"util.h"
+	"indice.h"
+
+1430156854 source:d:\marco\ord\trabalho1\arquivo.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"arquivo.h"
+	"util.h"
+	"indice.h"
+
+1430156854 d:\marco\ord\trabalho1\arquivo.h
+	"util.h"
+	<stdbool.h>
+
+1429990564 d:\marco\ord\trabalho1\util.h
+	<stdbool.h>
+
+1430163976 d:\marco\ord\trabalho1\indice.h
+	"util.h"
+
+1430247828 source:d:\marco\ord\trabalho1\busca.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"busca.h"
+	"util.h"
+
+1430187118 source:d:\marco\ord\trabalho1\indice.c
+	<stdio.h>
+	<stdlib.h>
+	"indice.h"
+	"arquivos.h"
+
+1430248662 source:d:\marco\ord\trabalho1\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"util.h"
+	"indice.h"
+	"arquivos.h"
+	"busca.h"
+
+1429643044 source:d:\marco\ord\trabalho1\util.c
+	<stdio.h>
+	"util.h"
+
+1430247736 source:d:\marco\ord\trabalho1\inserir.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"arquivo.h"
+	"util.h"
+	"indice.h"
+	"busca.h"
+
+1430245175 d:\marco\ord\trabalho1\busca.h
+	"indice.h"
+
+1430158342 d:\marco\ord\trabalho1\inserir.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"arquivo.h"
+	"util.h"
+	"indice.h"
+
+1430164126 source:d:\marco\ord\trabalho1\arquivos.c
+	<stdio.h>
+	<stdlib.h>
+	"arquivos.h"
+
+1430186588 d:\marco\ord\trabalho1\arquivos.h
+	"util.h"
+
+1430501555 source:c:\users\casa\trabalho_ord\trabalho\arquivos.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"arquivos.h"
+
+1430501555 c:\users\casa\trabalho_ord\trabalho\arquivos.h
+	"util.h"
+
+1430501555 c:\users\casa\trabalho_ord\trabalho\operacoes.h
+	"indice.h"
+
+1430502651 source:c:\users\casa\trabalho_ord\trabalho\operacoes.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"operacoes.h"
+	"util.h"
+	"arquivos.h"
 	"indice.h"
 

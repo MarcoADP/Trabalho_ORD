@@ -31,14 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="arquivo.c">
+		<Unit filename="arquivos.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="arquivo.h" />
-		<Unit filename="busca.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="busca.h" />
+		<Unit filename="arquivos.h" />
 		<Unit filename="indice.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -46,6 +42,10 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="operacoes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="operacoes.h" />
 		<Unit filename="util.c">
 			<Option compilerVar="CC" />
 		</Unit>
