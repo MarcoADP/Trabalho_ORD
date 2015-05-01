@@ -12,7 +12,7 @@ void pressEnter(){
 
 void clrscr(){
     int i;
-    for (i = 0; i < 50; ++i)
+    for (i = 0; i < 30; ++i)
         printf("\n\n");
 }
 

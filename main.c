@@ -2,13 +2,16 @@
 #include <stdlib.h>
 #include "operacoes.h"
 #include "util.h"
+#include "arquivos.h"
 
 void menuBusca(){
     char* campoRetorno[NUM_CAMPO_REG];
     int op;
     clrscr();
     do {
-        printf("\nSelecione o tipo da busca:\n");
+        printf("\n-----------------------------------------------\n");
+        printf("                 MENU DE BUSCA                 \n");
+        printf("-----------------------------------------------\n");
         printf("(1) - Buscar INDIVIDUOS pelo seu ID\n");
         printf("(2) - Buscar RACA pelo ID da raca\n");
         printf("(3) - Buscar RACAS pertencentes a um grupo\n");
@@ -64,13 +67,25 @@ void menuBusca(){
     } while (op != 6);
 }
 
-void menu(){
+void menuPrincipal(){
     int op;
-    clrscr();
+    
+    bool arquivosExistem = carregarIndices();
 
+    if (arquivosExistem){
+        printf("Arquivos de indices carregados com sucesso.\n");
+        printf("Nao e necessario importar arquivos.\n");
+    }
+    else {
+        printf("ERRO: Arquivos de dados ou de indices não existem.\n");
+        printf("Faca a importacao dos arquivos.\n");
+    }
     //mostrar titulo
     do {
-        printf("\n(1) - Importar arquivo\n");
+        printf("\n-----------------------------------------------\n");
+        printf("                 MENU PRINCIPAL                \n");
+        printf("-----------------------------------------------\n");
+        printf("(1) - Importar arquivo\n");
         printf("(2) - Inserir individuo\n");
         printf("(3) - Buscar\n");
         printf("(4) - Sair\n");
@@ -81,6 +96,7 @@ void menu(){
                 if (importarArq()){
                     clrscr();
                     printf("Arquivos importados e convertidos com sucesso.\n");
+                    arquivosExistem = true;
                 }
                 else {
                     clrscr();
@@ -88,18 +104,32 @@ void menu(){
                 }
                 break;
             case 2:
-                if (inserirIndividuo()){
-                    clrscr();
-                    printf("Individuo inserido com sucesso.\n");
+                if (arquivosExistem){
+                    if (inserirIndividuo()){
+                        clrscr();
+                        printf("Individuo inserido com sucesso.\n");
+                    }
+                    else {
+                        clrscr();
+                        printf("Insercao cancelada.\n");
+                    }
                 }
                 else {
                     clrscr();
-                    printf("Insercao cancelada.\n");
+                    printf("ERRO: Arquivo de individuos ou de racas nao existe.\n");
+                    printf("Importe os arquivos antes de inserir.\n");
                 }
                 break;
             case 3:
-                menuBusca();
-                clrscr();
+                if (arquivosExistem){
+                    menuBusca();
+                    clrscr();
+                }
+                else {
+                    clrscr();
+                    printf("ERRO: Arquivo de individuos ou de racas nao existe.\n");
+                    printf("Importe os arquivos antes de buscar.\n");
+                }
                 break;
             case 4:
                 break;
@@ -108,6 +138,14 @@ void menu(){
                 printf("ERRO: Opcao invalida\n");
         }
     } while (op != 4);
+}
+
+void iniciar(){
+    printf("***********************************************\n");
+    printf("*               CADASTRO DE CAES              *\n");
+    printf("***********************************************\n\n");
+
+    menuPrincipal();
 }
 
 int main(int argc, char const *argv[]){
@@ -119,9 +157,11 @@ int main(int argc, char const *argv[]){
         fread(&tam, 1, 2, arquivo);
         fread(buffer, 1, tam, arquivo);
         printf("%d -- %s\n", tam, buffer);
-    }*/
-
-    menu();
+    }
+    
+    fseek(arquivo, 0, SEEK_END);
+    printf("%d\n", ftell(arquivo));*/
+    iniciar();
 
     pressEnter();
     return 0;

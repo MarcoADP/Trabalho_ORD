@@ -5,5 +5,6 @@
 
 bool fimArquivo(FILE* arq);
 FILE* abrirArquivo(char nomeArquivo[], char modo[]);
+bool arqExiste(char nomeArquivo[]);
 
 #endif

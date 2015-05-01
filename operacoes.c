@@ -15,6 +15,33 @@ Indice ip3;
 ListaI listaIP1;
 ListaI listaIS2;
 
+bool carregarIndices(){
+    if (!arqExiste(NOME_ARQ_IND) || !arqExiste(NOME_ARQ_RACAS))
+        return false;
+
+    ip1 = lerArqIndice(NOME_ARQ_IP1, TIPO_IP1);
+    if (ip1.tam == 0)
+        return false;
+
+    is2 = lerArqIndice(NOME_ARQ_IS2, TIPO_IS2);
+    if (is2.tam == 0)
+        return false;
+
+    ip3 = lerArqIndice(NOME_ARQ_IP3, TIPO_IP3);
+    if (ip3.tam == 0)
+        return false;
+
+    listaIP1 = lerArqListaI(NOME_ARQ_LISTAIP1);
+    if (listaIP1.tam == 0)
+        return false;
+
+    listaIS2 = lerArqListaI(NOME_ARQ_LISTAIS2);
+    if (listaIS2.tam == 0)
+        return false;
+
+    return true;
+}
+
 char* lerCampo(FILE* arq){
     char *campo = malloc(MAX_CAMPO * sizeof(char));
     fgets(campo, MAX_CAMPO, arq);
@@ -107,11 +134,11 @@ bool importarArq(){
     qsort_indice(&is2);
     qsort_indice(&ip3);
 
-    criaArqIndice(ip1, "ip1.txt", TIPO_IP1);
-    criaArqIndice(is2, "is2.txt", TIPO_IS2);
-    criaArqIndice(ip3, "ip3.txt", TIPO_IP3);
-    criaArqListaI(listaIP1, "listaIP1.txt");
-    criaArqListaI(listaIS2, "listaIS2.txt");
+    criaArqIndice(ip1, NOME_ARQ_IP1, TIPO_IP1);
+    criaArqIndice(is2, NOME_ARQ_IS2, TIPO_IS2);
+    criaArqIndice(ip3, NOME_ARQ_IP3, TIPO_IP3);
+    criaArqListaI(listaIP1, NOME_ARQ_LISTAIP1);
+    criaArqListaI(listaIS2, NOME_ARQ_LISTAIS2);
 
     fclose(arquivoIndividuos);
     fclose(arquivoRacas);
@@ -125,6 +152,7 @@ bool inserirIndividuo(){
     FILE* arquivo;
     int idi;
     int idr;
+    int posicao;
     short tam_reg;
     char campo[MAX_CAMPO];
     char buffer[MAX_TAM_REG + 1] = "";
@@ -134,7 +162,7 @@ bool inserirIndividuo(){
     idi = lerInt("Digite o ID do Cachorro ou 0 para cancelar: ");
     if (idi == 0)
         return false;
-    while(buscaBinaria(ip3, idi) > -1){
+    while((posicao = buscaBinaria(ip3, idi)) > -1){
         printf("ERRO: O ID ja existe!\n");
         idi = lerInt("Digite outro ID ou 0 para cancelar: ");
         if (idi == 0)
@@ -149,7 +177,7 @@ bool inserirIndividuo(){
     idr = lerInt("Digite o ID da raca ou 0 para cancelar: ");
     if (idr == 0)
         return false;
-    while(buscaBinaria(ip1, idr) == -1){
+    while(buscaBinaria(ip1, idr) < 0){
         printf("ERRO: Nao existe raca com esse id!\n");
         idr = lerInt("Digite o ID da raca ou 0 para cancelar: ");
         if (idr == 0)
@@ -177,8 +205,13 @@ bool inserirIndividuo(){
     strcat(buffer, DELIM);
     campo[0] = '\0';
 
-    //VERIFICAR SE ARQUIVO EXISTE
-    arquivo = fopen(NOME_ARQ_IND, "a");
+    /*
+    *   Grava no arquivo de dados
+    */
+    arquivo = fopen(NOME_ARQ_IND, "r+");
+    fseek(arquivo, 0, SEEK_END);
+    
+    int offset = ftell(arquivo);
 
     tam_reg = strlen(buffer);
 
@@ -186,7 +219,22 @@ bool inserirIndividuo(){
     fwrite(buffer, tam_reg, 1, arquivo);
     fclose(arquivo);
 
-    //ATUALIZAR INDICES E LISTA INVERTIDA
+    /*
+    *   Insere na posição correta do indice e insere na lista invertida de ip1
+    */
+    int i;
+    posicao = -(posicao);
+    for (i = ip3.tam; i > posicao; --i)
+        ip3.reg[i] = ip3.reg[i-1];
+    
+    ip3.reg[posicao].chave = idi;
+    ip3.reg[posicao].offset = offset;
+    ip3.tam++;
+
+    inserirListaI(&listaIP1, idi, idr);
+
+    criaArqIndice(ip3, NOME_ARQ_IP3, TIPO_IP3);
+    criaArqListaI(listaIP1, NOME_ARQ_LISTAIP1);
 
     return true;
 }
@@ -210,7 +258,7 @@ bool buscaID(Indice ip, char nomeArquivo[], char* campoRetorno[]){
         return false;
     posicao = buscaBinaria(ip, id);
 
-    while (posicao == -1){
+    while (posicao < 0){
         printf("\nERRO: ID nao existe.\n");
         id = lerInt("\nDigite o ID ou 0 para cancelar: ");
         if (id == 0)

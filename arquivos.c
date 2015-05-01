@@ -25,3 +25,14 @@ FILE* abrirArquivo(char nomeArquivo[], char modo[]){
 
     return arq;
 }
+
+bool arqExiste(char nomeArquivo[]){
+    FILE* arq = fopen(nomeArquivo, "r");
+    if (arq == NULL){
+        fclose(arq);
+        return false;
+    }
+
+    fclose(arq);
+    return true;
+}
