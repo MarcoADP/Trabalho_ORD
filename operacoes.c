@@ -176,7 +176,7 @@ bool inserirIndividuo(){
     campo[0] = '\0';
 
     idr = lerInt("Digite o ID da raca ou 0 para cancelar: ");
-    if (idr <= 0) //Algum asno pode inserir negativo tambem!
+    if (idr <= 0)
         return false;
     while(buscaBinaria(ip1, idr) < 0){
         printf("ERRO: Nao existe raca com esse id!\n");
@@ -198,8 +198,18 @@ bool inserirIndividuo(){
     strcat(buffer, DELIM);
     campo[0] = '\0';
 
+    printf("(M)asculino ou (F)eminino\n");
     printf("Digite o sexo do cachorro ou 0 para cancelar: ");
     gets(campo);
+    campo[0] = uppercase(campo[0]);
+    while(strcmp(campo,"M") && strcmp(campo,"F")){
+        printf("Sexo inexistente!\n");
+        printf("(M)asculino ou (F)eminino\n");
+        printf("Digite o sexo do cachorro ou 0 para cancelar: ");
+        gets(campo);
+        char c = campo[0];
+        campo[0] = uppercase(c);
+    }
     if (strcmp(campo, "0") == 0)
         return false;
     strcat(buffer, campo);

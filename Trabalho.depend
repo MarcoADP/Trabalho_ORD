@@ -47,7 +47,7 @@
 	"util.h"
 	<stdbool.h>
 
-1430501555 c:\users\casa\trabalho_ord\trabalho\util.h
+1430505094 c:\users\casa\trabalho_ord\trabalho\util.h
 
 1430502087 c:\users\casa\trabalho_ord\trabalho\indice.h
 	<stdbool.h>
@@ -58,8 +58,9 @@
 	"indice.h"
 	"arquivos.h"
 
-1430501555 source:c:\users\casa\trabalho_ord\trabalho\util.c
+1430505077 source:c:\users\casa\trabalho_ord\trabalho\util.c
 	<stdio.h>
+	<ctype.h>
 	"util.h"
 
 1430501555 source:c:\users\casa\trabalho_ord\trabalho\main.c
@@ -165,7 +166,7 @@
 1430501555 c:\users\casa\trabalho_ord\trabalho\operacoes.h
 	"indice.h"
 
-1430502651 source:c:\users\casa\trabalho_ord\trabalho\operacoes.c
+1430504996 source:c:\users\casa\trabalho_ord\trabalho\operacoes.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
