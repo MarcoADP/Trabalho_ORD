@@ -35,6 +35,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="arquivo.h" />
+		<Unit filename="busca.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="busca.h" />
 		<Unit filename="indice.c">
 			<Option compilerVar="CC" />
 		</Unit>
