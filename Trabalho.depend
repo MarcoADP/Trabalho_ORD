@@ -63,7 +63,7 @@
 	<ctype.h>
 	"util.h"
 
-1430501555 source:c:\users\casa\trabalho_ord\trabalho\main.c
+1430520085 source:c:\users\casa\trabalho_ord\trabalho\main.c
 	<stdio.h>
 	<stdlib.h>
 	"operacoes.h"
@@ -166,7 +166,7 @@
 1430501555 c:\users\casa\trabalho_ord\trabalho\operacoes.h
 	"indice.h"
 
-1430504996 source:c:\users\casa\trabalho_ord\trabalho\operacoes.c
+1430519120 source:c:\users\casa\trabalho_ord\trabalho\operacoes.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

@@ -24,11 +24,7 @@ void menuBusca(){
             case 1:
                 if (buscaID(ip3, NOME_ARQ_IND, campoRetorno)){
                     clrscr();
-                    printf("RESULTADO DA BUSCA:\n");
-                    printf("ID-I: %s\n", campoRetorno[0]);
-                    printf("ID-R: %s\n", campoRetorno[1]);
-                    printf("NOME: %s\n", campoRetorno[2]);
-                    printf("SEXO: %s\n", campoRetorno[3]);
+                    printaRegistro(campoRetorno);
                 }
                 else {
                     clrscr();
@@ -38,11 +34,7 @@ void menuBusca(){
             case 2:
                 if (buscaID(ip1, NOME_ARQ_RACAS, campoRetorno)) {
                     clrscr();
-                    printf("RESULTADO DA BUSCA:\n");
-                    printf("ID-R: %s\n", campoRetorno[0]);
-                    printf("RACA: %s\n", campoRetorno[1]);
-                    printf("ID-G: %s\n", campoRetorno[2]);
-                    printf("GRUPO: %s\n", campoRetorno[3]);
+                    printaRegistro(campoRetorno);
                 }
                 else {
                     clrscr();
@@ -50,6 +42,11 @@ void menuBusca(){
                 }
                 break;
             case 3:
+                if (buscaLista(is2, listaIS2, campoRetorno, ip1)){
+                    clrscr();
+                    printaRegistro(campoRetorno);
+                }
+                //printaRegistro(campoRetorno);
                 //Buscar através da lista invertida + is2
                 break;
             case 4:
@@ -69,7 +66,7 @@ void menuBusca(){
 
 void menuPrincipal(){
     int op;
-    
+
     bool arquivosExistem = carregarIndices();
 
     if (arquivosExistem){
@@ -158,7 +155,7 @@ int main(int argc, char const *argv[]){
         fread(buffer, 1, tam, arquivo);
         printf("%d -- %s\n", tam, buffer);
     }
-    
+
     fseek(arquivo, 0, SEEK_END);
     printf("%d\n", ftell(arquivo));*/
     iniciar();
