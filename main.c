@@ -42,14 +42,18 @@ void menuBusca(){
                 }
                 break;
             case 3:
-                if (buscaLista(is2, listaIS2, campoRetorno, ip1)){
-                    clrscr();
-                    printaRegistro(campoRetorno);
+                if (!buscaLista(is2, listaIS2, ip1, NOME_ARQ_RACAS)){
+                    printf("Nao ha racas pertecentes a esse grupo!\n");
+                    //printaRegistro(campoRetorno);
                 }
                 //printaRegistro(campoRetorno);
                 //Buscar através da lista invertida + is2
                 break;
             case 4:
+                if (!buscaLista(ip1, listaIP1, ip3, NOME_ARQ_IND )){
+                    printf("Nao ha racas pertecentes a esse grupo!\n");
+                    //printaRegistro(campoRetorno);
+                }
                 //Buscar através da lista invertida + ip1
                 break;
             case 5:

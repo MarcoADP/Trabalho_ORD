@@ -2,12 +2,6 @@
 #include <ctype.h>
 #include "util.h"
 
-char* uppercase(char campo){
-    int i;
-    char* retorno;
-    retorno = toupper(campo);
-    return retorno;
-}
 
 void limpar_stdin(){
     while (getchar() != '\n');

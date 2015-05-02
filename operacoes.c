@@ -194,6 +194,12 @@ bool inserirIndividuo(){
     gets(campo);
     if (strcmp(campo, "0") == 0)
         return false;
+    int b;
+    for(b = 0; b < strlen(campo); b++){
+
+        campo[b] = toupper(campo[b]);
+    }
+
     strcat(buffer, campo);
     strcat(buffer, DELIM);
     campo[0] = '\0';
@@ -201,14 +207,14 @@ bool inserirIndividuo(){
     printf("(M)asculino ou (F)eminino\n");
     printf("Digite o sexo do cachorro ou 0 para cancelar: ");
     gets(campo);
-    campo[0] = uppercase(campo[0]);
+    campo[0] = toupper(campo[0]);
     while(strcmp(campo,"M") && strcmp(campo,"F")){
         printf("Sexo inexistente!\n");
         printf("(M)asculino ou (F)eminino\n");
         printf("Digite o sexo do cachorro ou 0 para cancelar: ");
         gets(campo);
         char c = campo[0];
-        campo[0] = uppercase(c);
+        campo[0] = toupper(campo[0]);
     }
     if (strcmp(campo, "0") == 0)
         return false;
@@ -262,7 +268,7 @@ void printaRegistro(char* campoRetorno[]){
     printf("ID-R: %s\n", campoRetorno[0]);
     printf("RACA: %s\n", campoRetorno[1]);
     printf("ID-G: %s\n", campoRetorno[2]);
-    printf("GRUPO: %s\n", campoRetorno[3]);
+    printf("GRUPO: %s\n\n\n", campoRetorno[3]);
 }
 
 bool buscaID(Indice ip, char nomeArquivo[], char* campoRetorno[]){
@@ -295,13 +301,15 @@ bool buscaID(Indice ip, char nomeArquivo[], char* campoRetorno[]){
     return true;
 }
 
-bool buscaLista(Indice ip, ListaI lista ,char* campoRetorno[], Indice ind){
+bool buscaLista(Indice ip, ListaI lista, Indice ind, char nomeArquivo[]){
+    char* campoRetorno[MAX_TAM_REG];
     FILE* arquivo;
     int id;
     int posicao;
     int posicaoLista;
     int posicaoReg;
-    int elemento;
+    int posicaoProx;
+
     short tam_reg;
     char buffer[MAX_TAM_REG] = "";
 
@@ -311,22 +319,31 @@ bool buscaLista(Indice ip, ListaI lista ,char* campoRetorno[], Indice ind){
         return false;
     }
     posicao = buscaBinaria(ip, id);
+    if (posicao < 0){
+        return false;
+    }
     printf("Posicao em is2: %d\n", posicao);
     posicaoLista = ip.reg[posicao].rrn;
     printf("Posicao na lista: %d\n", posicaoLista);
     printf("ID na posicao: %d\n", lista.reg[posicaoLista].chave);
     printf("Proximo: %d\n\n", lista.reg[posicaoLista].prox);
 
-    posicaoReg = buscaBinaria(ind, lista.reg[posicaoLista].chave);
 
-    arquivo = abrirArquivo("convertidoRacas.txt", "r");
 
-    fseek(arquivo, ip.reg[posicaoReg].offset, SEEK_SET);
-    fread(&tam_reg, sizeof(tam_reg), 1, arquivo);
-    fread(buffer, tam_reg, 1, arquivo);
+    //arquivo = abrirArquivo("convertidoRacas.txt", "r");
+    arquivo = abrirArquivo(nomeArquivo, "r");
+    while(posicaoLista > -1){
+        posicao = lista.reg[posicaoLista].chave;
+        posicaoReg = buscaBinaria(ind, posicao);
+        fseek(arquivo, ind.reg[posicaoReg].offset, SEEK_SET);
+        fread(&tam_reg, sizeof(tam_reg), 1, arquivo);
+        fread(buffer, tam_reg, 1, arquivo);
 
-    transformaBuffer(buffer, campoRetorno);
+        transformaBuffer(buffer, campoRetorno);
+        printaRegistro(campoRetorno);
 
+        posicaoLista = lista.reg[posicaoLista].prox;
+    }
     return true;
 
 }
