@@ -1,0 +1,46 @@
+# depslib dependency file v1.0
+1430588090 source:d:\marco\ord\trabalho\indice.c
+	<stdio.h>
+	<stdlib.h>
+	"indice.h"
+	"arquivos.h"
+
+1430588090 d:\marco\ord\trabalho\indice.h
+	<stdbool.h>
+
+1430588090 d:\marco\ord\trabalho\arquivos.h
+	"util.h"
+
+1430588090 d:\marco\ord\trabalho\util.h
+
+1430588090 source:d:\marco\ord\trabalho\main.c
+	<stdio.h>
+	<stdlib.h>
+	"operacoes.h"
+	"util.h"
+	"arquivos.h"
+
+1430588090 d:\marco\ord\trabalho\operacoes.h
+	"indice.h"
+
+1430588090 source:d:\marco\ord\trabalho\util.c
+	<stdio.h>
+	<ctype.h>
+	"util.h"
+
+1430588090 source:d:\marco\ord\trabalho\arquivos.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"arquivos.h"
+
+1430588090 source:d:\marco\ord\trabalho\operacoes.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdbool.h>
+	"operacoes.h"
+	"util.h"
+	"arquivos.h"
+	"indice.h"
+
