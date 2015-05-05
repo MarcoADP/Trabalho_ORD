@@ -2,7 +2,6 @@
 #include <ctype.h>
 #include "util.h"
 
-
 void limpar_stdin(){
     while (getchar() != '\n');
 }

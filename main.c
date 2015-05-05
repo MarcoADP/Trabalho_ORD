@@ -4,11 +4,23 @@
 #include "util.h"
 #include "arquivos.h"
 
+void printaRegistro(CampoRetorno *retorno){
+    int i;
+    printf("RESULTADO DA BUSCA:\n");
+    for (i = 0; i < retorno->tam; i++){
+        printf("ID-R: %s\n", retorno->campo[i][0]);
+        printf("RACA: %s\n", retorno->campo[i][1]);
+        printf("ID-G: %s\n", retorno->campo[i][2]);
+        printf("GRUPO: %s\n\n\n", retorno->campo[i][3]);
+    }
+}
+
 void menuBusca(){
-    char* campoRetorno[NUM_CAMPO_REG];
-    int op;
+    CampoRetorno *retorno = malloc(sizeof(CampoRetorno));
+    int op, posicao;
     clrscr();
     do {
+        retorno->tam = 0;
         printf("\n-----------------------------------------------\n");
         printf("                 MENU DE BUSCA                 \n");
         printf("-----------------------------------------------\n");
@@ -22,39 +34,52 @@ void menuBusca(){
 
         switch(op){
             case 1:
-                if (buscaID(ip3, NOME_ARQ_IND, campoRetorno)){
-                    clrscr();
-                    printaRegistro(campoRetorno);
-                }
-                else {
+                posicao = recuperaPosicaoID(ip3, "Digite o ID do INDIVIDUO ou 0 para cancelar: ");
+                if (posicao < 0){
                     clrscr();
                     printf("Busca cancelada.\n");
+                }
+                else { 
+                    buscaID(ip3, posicao, NOME_ARQ_IND, retorno);
+                    clrscr();
+                    printaRegistro(retorno);
                 }
                 break;
             case 2:
-                if (buscaID(ip1, NOME_ARQ_RACAS, campoRetorno)) {
-                    clrscr();
-                    printaRegistro(campoRetorno);
-                }
-                else {
+                posicao = recuperaPosicaoID(ip1, "Digite o ID da RACA ou 0 para cancelar: ");
+                if (posicao < 0){
                     clrscr();
                     printf("Busca cancelada.\n");
                 }
+                else { 
+                    buscaID(ip1, posicao, NOME_ARQ_RACAS, retorno);
+                    clrscr();
+                    printaRegistro(retorno);
+                }
                 break;
             case 3:
-                if (!buscaLista(is2, listaIS2, ip1, NOME_ARQ_RACAS)){
-                    printf("Nao ha racas pertecentes a esse grupo!\n");
-                    //printaRegistro(campoRetorno);
+                posicao = recuperaPosicaoID(is2, "Digite o ID do GRUPO ou 0 para cancelar: ");
+                if (posicao < 0){
+                    clrscr();
+                    printf("Busca cancelada.\n");
                 }
-                //printaRegistro(campoRetorno);
-                //Buscar através da lista invertida + is2
+                else {
+                    buscaLista(is2, posicao, listaIS2, ip1, NOME_ARQ_RACAS, retorno);
+                    clrscr();
+                    printaRegistro(retorno);
+                }
                 break;
             case 4:
-                if (!buscaLista(ip1, listaIP1, ip3, NOME_ARQ_IND )){
-                    printf("Nao ha racas pertecentes a esse grupo!\n");
-                    //printaRegistro(campoRetorno);
+                posicao = recuperaPosicaoID(ip1, "Digite o ID da RACA ou 0 para cancelar: ");
+                if (posicao < 0){
+                    clrscr();
+                    printf("Busca cancelada.\n");
                 }
-                //Buscar através da lista invertida + ip1
+                else {
+                    buscaLista(ip1, posicao, listaIP1, ip3, NOME_ARQ_IND, retorno);
+                    clrscr();
+                    printaRegistro(retorno);
+                }
                 break;
             case 5:
                 //Buscar através da lista invertida + ip1
@@ -67,6 +92,7 @@ void menuBusca(){
         }
     } while (op != 6);
 }
+
 
 void menuPrincipal(){
     int op;
@@ -162,6 +188,7 @@ int main(int argc, char const *argv[]){
 
     fseek(arquivo, 0, SEEK_END);
     printf("%d\n", ftell(arquivo));*/
+
     iniciar();
 
     pressEnter();
