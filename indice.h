@@ -36,14 +36,13 @@ struct lista_invertida {
     int tam;
 };
 
-
+Indice lerArqIndice(char nomeArquivo[], int tipo);
 void criaArqIndice(Indice ind, char nomeArquivo[], int tipo);
+ListaI lerArqListaI(char nomeArquivo[]);
+void criaArqListaI(ListaI lista, char nomeArquivo[]);
+bool inserirListaI(ListaI* lista, int chave, int chave_sec);
+int atribuiRRN(ListaI lista, int chave);
 void qsort_indice(Indice *ind);
 int buscaBinaria(Indice ind, int chave);
-bool inserirListaI(ListaI* lista, int chave, int chave_sec);
-void criaArqListaI(ListaI lista, char nomeArquivo[]);
-int atribuiRRN(ListaI lista, int chave);
-Indice lerArqIndice(char nomeArquivo[], int tipo);
-ListaI lerArqListaI(char nomeArquivo[]);
 
 #endif

@@ -6,5 +6,4 @@ void pressEnter();
 void clrscr();
 int lerInt(char msg[]);
 
-
 #endif

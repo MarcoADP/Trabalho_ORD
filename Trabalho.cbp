@@ -31,9 +31,25 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="arquivos.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="arquivos.h" />
+		<Unit filename="indice.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="indice.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="operacoes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="operacoes.h" />
+		<Unit filename="util.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="util.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

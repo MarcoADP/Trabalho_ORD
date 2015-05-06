@@ -21,11 +21,18 @@ extern Indice ip3;
 extern ListaI listaIP1;
 extern ListaI listaIS2;
 
+typedef struct campo_retorno CampoRetorno;
+struct campo_retorno {
+    char campo[CAMPO_REG][NUM_CAMPO_REG][MAX_CAMPO];
+    int tam;
+};
+
 bool carregarIndices();
 bool importarArq();
 bool inserirIndividuo();
-void printaRegistro(char* campoRetorno[][NUM_CAMPO_REG], int linha);
-bool buscaID(Indice ip, char nomeArquivo[], char* campoRetorno[][NUM_CAMPO_REG]);
-bool buscaLista(Indice ip, ListaI lista, Indice ind, char nomeArquivo[], char* campoRetorno[][NUM_CAMPO_REG]);
+int recuperaPosicaoID(Indice ind, char msg[]);
+bool buscaID(Indice ind, int posicao, FILE* arquivo, CampoRetorno *retorno, int linha);
+bool buscaLista(Indice ind1, int posicao, ListaI lista, Indice ind2, FILE* arquivo, CampoRetorno *retorno);
+
 
 #endif

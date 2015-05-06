@@ -4,11 +4,30 @@
 #include "util.h"
 #include "arquivos.h"
 
+void printaIndividuo(CampoRetorno *retorno, int i){
+    printf("RESULTADO DA BUSCA:\n");
+        printf("ID-I: %s\n", retorno->campo[i][0]);
+        printf("ID-R: %s\n", retorno->campo[i][1]);
+        printf("NOME: %s\n", retorno->campo[i][2]);
+        printf("SEXO: %s\n\n\n", retorno->campo[i][3]);
+}
+
+void printaRaca(CampoRetorno *retorno, int i){
+    printf("RESULTADO DA BUSCA:\n");
+        printf("ID-R: %s\n", retorno->campo[i][0]);
+        printf("RACA: %s\n", retorno->campo[i][1]);
+        printf("ID-G: %s\n", retorno->campo[i][2]);
+        printf("GRUPO: %s\n\n\n", retorno->campo[i][3]);
+}
+
 void menuBusca(){
-    char* campoRetorno[CAMPO_REG][NUM_CAMPO_REG];
-    int op, tamanho, i;
+    CampoRetorno *retorno = malloc(sizeof(CampoRetorno));
+    int op, posicao, i;
+    FILE* arquivo;
+    char condicao[50];
     clrscr();
     do {
+        retorno->tam = 0;
         printf("\n-----------------------------------------------\n");
         printf("                 MENU DE BUSCA                 \n");
         printf("-----------------------------------------------\n");
@@ -22,43 +41,94 @@ void menuBusca(){
 
         switch(op){
             case 1:
-                if (buscaID(ip3, NOME_ARQ_IND, campoRetorno)){
-                    clrscr();
-                    printaRegistro(campoRetorno, 0);
-
-                }
-                else {
+                posicao = recuperaPosicaoID(ip3, "Digite o ID do INDIVIDUO ou 0 para cancelar: ");
+                if (posicao < 0){
                     clrscr();
                     printf("Busca cancelada.\n");
+                }
+                else {
+                    arquivo = abrirArquivo(NOME_ARQ_IND, "r");
+                    buscaID(ip3, posicao, arquivo, retorno, 0);
+                    fclose(arquivo);
+                    clrscr();
+                    printaIndividuo(retorno, 0);
                 }
                 break;
             case 2:
-                if (buscaID(ip1, NOME_ARQ_RACAS, campoRetorno)) {
-                    clrscr();
-                    printaRegistro(campoRetorno, 0);
-                }
-                else {
+                posicao = recuperaPosicaoID(ip1, "Digite o ID da RACA ou 0 para cancelar: ");
+                if (posicao < 0){
                     clrscr();
                     printf("Busca cancelada.\n");
                 }
+                else {
+                    arquivo = abrirArquivo(NOME_ARQ_RACAS, "r");
+                    buscaID(ip1, posicao, arquivo, retorno, 0);
+                    fclose(arquivo);
+                    clrscr();
+                    printaRaca(retorno, 0);
+                }
                 break;
             case 3:
-                if (buscaLista(is2, listaIS2, ip1, NOME_ARQ_RACAS, campoRetorno)){
-                    for(i = 0; i < 1; i++){
-                    printaRegistro(campoRetorno, 0);
+                posicao = recuperaPosicaoID(is2, "Digite o ID do GRUPO ou 0 para cancelar: ");
+                if (posicao < 0){
+                    clrscr();
+                    printf("Busca cancelada.\n");
+                }
+                else {
+                    arquivo = abrirArquivo(NOME_ARQ_RACAS, "r");
+                    buscaLista(is2, posicao, listaIS2, ip1, arquivo, retorno);
+                    fclose(arquivo);
+                    clrscr();
+                    for(i = 0; i < retorno->tam; i++){
+                        printaRaca(retorno, i);
                     }
                 }
-                //printaRegistro(campoRetorno);
-                //Buscar através da lista invertida + is2
                 break;
             case 4:
-                if (!buscaLista(ip1, listaIP1, ip3, NOME_ARQ_IND, campoRetorno)){
-
+                posicao = recuperaPosicaoID(ip1, "Digite o ID da RACA ou 0 para cancelar: ");
+                if (posicao < 0){
+                    clrscr();
+                    printf("Busca cancelada.\n");
                 }
-                //Buscar através da lista invertida + ip1
+                else {
+                    arquivo = abrirArquivo(NOME_ARQ_IND, "r");
+                    buscaLista(ip1, posicao, listaIP1, ip3, arquivo, retorno);
+                    fclose(arquivo);
+                    clrscr();
+                    for(i = 0; i < retorno->tam; i++){
+                        printaIndividuo(retorno, i);
+                    }
+                }
                 break;
             case 5:
-                //Buscar através da lista invertida + ip1
+                posicao = recuperaPosicaoID(ip1, "Digite o ID da RACA ou 0 para cancelar: ");
+                if (posicao < 0){
+                    clrscr();
+                    printf("Busca cancelada.\n");
+                } else {
+                    arquivo = abrirArquivo(NOME_ARQ_IND, "r");
+                    buscaLista(ip1, posicao, listaIP1, ip3, arquivo, retorno);
+
+                    fclose(arquivo);
+                    printf("Digite o SEXO do INDIVIDUO ou 0 para cancelar: ");
+                    gets(condicao);
+                    condicao[0] = toupper(condicao[0]);
+                    while (strcmp(condicao, "M") && strcmp(condicao, "F")){
+                        printf("\nERRO: Sexo inexistente!\n");
+                        printf("\n(M)asculino ou (F)eminino\n");
+                        printf("Digite o sexo do cachorro ou 0 para cancelar: ");
+                        gets(condicao);
+                        if (strcmp(condicao, "0") == 0)
+                            return false;
+                        condicao[0] = toupper(condicao[0]);
+                    }
+                    clrscr();
+                    for(i = 0; i < retorno->tam; i++){
+                        if(!strcmp(condicao, retorno->campo[i][3])){
+                            printaIndividuo(retorno, i);
+                        }
+                    }
+                }
                 break;
             case 6:
                 break;
@@ -161,9 +231,9 @@ int main(int argc, char const *argv[]){
         fread(buffer, 1, tam, arquivo);
         printf("%d -- %s\n", tam, buffer);
     }
-
     fseek(arquivo, 0, SEEK_END);
     printf("%d\n", ftell(arquivo));*/
+
     iniciar();
 
     pressEnter();

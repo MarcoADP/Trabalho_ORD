@@ -5,25 +5,25 @@
 	"indice.h"
 	"arquivos.h"
 
-1430588090 d:\marco\ord\trabalho\indice.h
+1430795049 d:\marco\ord\trabalho\indice.h
 	<stdbool.h>
 
-1430588090 d:\marco\ord\trabalho\arquivos.h
+1430795052 d:\marco\ord\trabalho\arquivos.h
 	"util.h"
 
-1430588090 d:\marco\ord\trabalho\util.h
+1430795181 d:\marco\ord\trabalho\util.h
 
-1430588090 source:d:\marco\ord\trabalho\main.c
+1430852285 source:d:\marco\ord\trabalho\main.c
 	<stdio.h>
 	<stdlib.h>
 	"operacoes.h"
 	"util.h"
 	"arquivos.h"
 
-1430588090 d:\marco\ord\trabalho\operacoes.h
+1430849226 d:\marco\ord\trabalho\operacoes.h
 	"indice.h"
 
-1430588090 source:d:\marco\ord\trabalho\util.c
+1430795169 source:d:\marco\ord\trabalho\util.c
 	<stdio.h>
 	<ctype.h>
 	"util.h"
@@ -34,11 +34,12 @@
 	<stdbool.h>
 	"arquivos.h"
 
-1430588090 source:d:\marco\ord\trabalho\operacoes.c
+1430866898 source:d:\marco\ord\trabalho\operacoes.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<stdbool.h>
+	<ctype.h>
 	"operacoes.h"
 	"util.h"
 	"arquivos.h"
