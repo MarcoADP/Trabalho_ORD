@@ -5,7 +5,7 @@
 
 #define MAX_CAMPO 50
 #define NUM_CAMPO_REG 4
-#define CAMPO_REG 99
+#define CAMPO_REG 100
 
 #define NOME_ARQ_IND "convertidoIndividuos.txt"
 #define NOME_ARQ_RACAS "convertidoRacas.txt"
@@ -30,9 +30,9 @@ struct campo_retorno {
 bool carregarIndices();
 bool importarArq();
 bool inserirIndividuo();
+char lerSexo();
 int recuperaPosicaoID(Indice ind, char msg[]);
-bool buscaID(Indice ind, int posicao, FILE* arquivo, CampoRetorno *retorno, int linha);
-bool buscaLista(Indice ind1, int posicao, ListaI lista, Indice ind2, FILE* arquivo, CampoRetorno *retorno);
-
+void buscaID(Indice ind, int posicao, FILE* arquivo, CampoRetorno *retorno, char *condicaoSexo);
+CampoRetorno buscaLista(Indice ind1, int posicao, ListaI lista, Indice ind2, FILE* arquivo, char *condicaoSexo);
 
 #endif

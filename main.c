@@ -4,30 +4,45 @@
 #include "util.h"
 #include "arquivos.h"
 
-void printaIndividuo(CampoRetorno *retorno, int i){
+void printaIndividuo(CampoRetorno retorno){
+    if (retorno.tam == 0){
+        printf("Nenhum resultado encontrado.\n");
+        return;
+    }
+    int i;
     printf("RESULTADO DA BUSCA:\n");
-        printf("ID-I: %s\n", retorno->campo[i][0]);
-        printf("ID-R: %s\n", retorno->campo[i][1]);
-        printf("NOME: %s\n", retorno->campo[i][2]);
-        printf("SEXO: %s\n\n\n", retorno->campo[i][3]);
+    for (i = 0; i < retorno.tam; i++){
+        printf("\nID-I: %s\n", retorno.campo[i][0]);
+        printf("ID-R: %s\n", retorno.campo[i][1]);
+        printf("NOME: %s\n", retorno.campo[i][2]);
+        printf("SEXO: %s\n", retorno.campo[i][3]);
+    }
 }
 
-void printaRaca(CampoRetorno *retorno, int i){
+void printaRaca(CampoRetorno retorno){
+    if (retorno.tam == 0){
+        printf("Nenhum resultado encontrado.\n");
+        return;
+    }
+    int i;
     printf("RESULTADO DA BUSCA:\n");
-        printf("ID-R: %s\n", retorno->campo[i][0]);
-        printf("RACA: %s\n", retorno->campo[i][1]);
-        printf("ID-G: %s\n", retorno->campo[i][2]);
-        printf("GRUPO: %s\n\n\n", retorno->campo[i][3]);
+    for (i = 0; i < retorno.tam; i++){
+        printf("\nID-R: %s\n", retorno.campo[i][0]);
+        printf("RACA: %s\n", retorno.campo[i][1]);
+        printf("ID-G: %s\n", retorno.campo[i][2]);
+        printf("GRUPO: %s\n", retorno.campo[i][3]);
+    }
 }
 
 void menuBusca(){
-    CampoRetorno *retorno = malloc(sizeof(CampoRetorno));
-    int op, posicao, i;
     FILE* arquivo;
-    char condicao[50];
+    CampoRetorno retorno;
+    int op, posicao;
+    char sexo[2];
+    sexo[1] = '\0';
     clrscr();
     do {
-        retorno->tam = 0;
+        retorno.tam = 0;
         printf("\n-----------------------------------------------\n");
         printf("                 MENU DE BUSCA                 \n");
         printf("-----------------------------------------------\n");
@@ -48,10 +63,10 @@ void menuBusca(){
                 }
                 else {
                     arquivo = abrirArquivo(NOME_ARQ_IND, "r");
-                    buscaID(ip3, posicao, arquivo, retorno, 0);
+                    buscaID(ip3, posicao, arquivo, &retorno, NULL);
                     fclose(arquivo);
                     clrscr();
-                    printaIndividuo(retorno, 0);
+                    printaIndividuo(retorno);
                 }
                 break;
             case 2:
@@ -62,10 +77,10 @@ void menuBusca(){
                 }
                 else {
                     arquivo = abrirArquivo(NOME_ARQ_RACAS, "r");
-                    buscaID(ip1, posicao, arquivo, retorno, 0);
+                    buscaID(ip1, posicao, arquivo, &retorno, NULL);
                     fclose(arquivo);
                     clrscr();
-                    printaRaca(retorno, 0);
+                    printaRaca(retorno);
                 }
                 break;
             case 3:
@@ -76,12 +91,10 @@ void menuBusca(){
                 }
                 else {
                     arquivo = abrirArquivo(NOME_ARQ_RACAS, "r");
-                    buscaLista(is2, posicao, listaIS2, ip1, arquivo, retorno);
+                    retorno = buscaLista(is2, posicao, listaIS2, ip1, arquivo, NULL);
                     fclose(arquivo);
                     clrscr();
-                    for(i = 0; i < retorno->tam; i++){
-                        printaRaca(retorno, i);
-                    }
+                    printaRaca(retorno);
                 }
                 break;
             case 4:
@@ -92,12 +105,10 @@ void menuBusca(){
                 }
                 else {
                     arquivo = abrirArquivo(NOME_ARQ_IND, "r");
-                    buscaLista(ip1, posicao, listaIP1, ip3, arquivo, retorno);
+                    retorno = buscaLista(ip1, posicao, listaIP1, ip3, arquivo, NULL);
                     fclose(arquivo);
                     clrscr();
-                    for(i = 0; i < retorno->tam; i++){
-                        printaIndividuo(retorno, i);
-                    }
+                    printaIndividuo(retorno);
                 }
                 break;
             case 5:
@@ -105,29 +116,19 @@ void menuBusca(){
                 if (posicao < 0){
                     clrscr();
                     printf("Busca cancelada.\n");
-                } else {
+                }
+                else {
+                    sexo[0] = lerSexo();
+                    if (sexo[0] == '0'){
+                        clrscr();
+                        printf("Busca cancelada.\n");
+                        break;
+                    }
                     arquivo = abrirArquivo(NOME_ARQ_IND, "r");
-                    buscaLista(ip1, posicao, listaIP1, ip3, arquivo, retorno);
-
+                    retorno = buscaLista(ip1, posicao, listaIP1, ip3, arquivo, sexo);
                     fclose(arquivo);
-                    printf("Digite o SEXO do INDIVIDUO ou 0 para cancelar: ");
-                    gets(condicao);
-                    condicao[0] = toupper(condicao[0]);
-                    while (strcmp(condicao, "M") && strcmp(condicao, "F")){
-                        printf("\nERRO: Sexo inexistente!\n");
-                        printf("\n(M)asculino ou (F)eminino\n");
-                        printf("Digite o sexo do cachorro ou 0 para cancelar: ");
-                        gets(condicao);
-                        if (strcmp(condicao, "0") == 0)
-                            return false;
-                        condicao[0] = toupper(condicao[0]);
-                    }
                     clrscr();
-                    for(i = 0; i < retorno->tam; i++){
-                        if(!strcmp(condicao, retorno->campo[i][3])){
-                            printaIndividuo(retorno, i);
-                        }
-                    }
+                    printaIndividuo(retorno);
                 }
                 break;
             case 6:
@@ -153,7 +154,6 @@ void menuPrincipal(){
         printf("ERRO: Arquivos de dados ou de indices não existem.\n");
         printf("Faca a importacao dos arquivos.\n");
     }
-    //mostrar titulo
     do {
         printf("\n-----------------------------------------------\n");
         printf("                 MENU PRINCIPAL                \n");
@@ -222,18 +222,6 @@ void iniciar(){
 }
 
 int main(int argc, char const *argv[]){
-    /*FILE* arquivo = abrirArquivo("convertidoIndividuos.txt","r");
-    int i;
-    short tam;
-    for(i = 0; i < 60; i++){
-        char buffer[512] = "";
-        fread(&tam, 1, 2, arquivo);
-        fread(buffer, 1, tam, arquivo);
-        printf("%d -- %s\n", tam, buffer);
-    }
-    fseek(arquivo, 0, SEEK_END);
-    printf("%d\n", ftell(arquivo));*/
-
     iniciar();
 
     pressEnter();

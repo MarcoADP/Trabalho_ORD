@@ -11,26 +11,27 @@
 #define TIPO_IP3 3
 
 typedef struct reg_indice RegIndice;
+typedef struct indice Indice;
+typedef struct lista_invertida ListaI;
+typedef struct reg_lista_invertida RegListaI;
+
 struct reg_indice {
     int chave;
     int offset;
     int rrn;
 };
 
-typedef struct indice Indice;
 struct indice {
     RegIndice reg[MAX_REG_INDICE];
     //int flag;
     int tam;
 };
 
-typedef struct reg_lista_invertida RegListaI;
 struct reg_lista_invertida {
     int chave;
     int prox;
 };
 
-typedef struct lista_invertida ListaI;
 struct lista_invertida {
     RegListaI reg[MAX_REG_LISTA];
     int tam;

@@ -156,9 +156,30 @@ bool importarArq(){
     return true;
 }
 
+char lerSexo(){
+    char sexo[1];
+
+    printf("\n(M)asculino ou (F)eminino\n");
+    printf("Digite o sexo do cachorro ou 0 para cancelar: ");
+    gets(sexo);
+    if (strcmp(sexo, "0") == 0)
+        return '0';
+    sexo[0] = toupper(sexo[0]);
+    while (strcmp(sexo, "M") && strcmp(sexo, "F")){
+        printf("\nERRO: Sexo inexistente!\n");
+        printf("\n(M)asculino ou (F)eminino\n");
+        printf("Digite o sexo do cachorro ou 0 para cancelar: ");
+        gets(sexo);
+        if (strcmp(sexo, "0") == 0)
+            return '0';
+        sexo[0] = toupper(sexo[0]);
+    }
+
+    return sexo[0];
+}
+
 bool inserirIndividuo(){
     FILE* arquivo;
-    int l;
     int idi;
     int idr;
     int posicao;
@@ -169,12 +190,12 @@ bool inserirIndividuo(){
     printf("\nCadastro de cachorros:\n\n");
 
     idi = lerInt("Digite o ID do Cachorro ou 0 para cancelar: ");
-    if (idi <= 0)
+    if (idi == 0)
         return false;
-    while((posicao = buscaBinaria(ip3, idi)) > -1){
-        printf("ERRO: O ID ja existe!\n");
+    while((posicao = buscaBinaria(ip3, idi)) > -1 || idi < 0){
+        printf("ERRO: O ID eh invalido ou ja existe!\n");
         idi = lerInt("\nDigite outro ID ou 0 para cancelar: ");
-        if (idi <= 0)
+        if (idi == 0)
             return false;
     }
 
@@ -186,7 +207,7 @@ bool inserirIndividuo(){
     idr = lerInt("\nDigite o ID da raca ou 0 para cancelar: ");
     if (idr == 0)
         return false;
-    while(buscaBinaria(ip1, idr) < 0){
+    while(buscaBinaria(ip1, idr) < 0 || idr < 0){
         printf("ERRO: Nao existe raca com esse id!\n");
         idr = lerInt("\nDigite o ID da raca ou 0 para cancelar: ");
         if (idr == 0)
@@ -200,30 +221,22 @@ bool inserirIndividuo(){
 
     printf("\nDigite o nome do cachorro ou 0 para cancelar: ");
     gets(campo);
-    for(l = 0; l < strlen(campo); l++){
-        campo[l] = toupper(campo[l]);
-    }
     if (strcmp(campo, "0") == 0)
         return false;
+
+    int l;
+    for(l = 0; l < strlen(campo); l++)
+        campo[l] = toupper(campo[l]);
+    
     strcat(buffer, campo);
     strcat(buffer, DELIM);
     campo[0] = '\0';
 
-    printf("\n(M)asculino ou (F)eminino\n");
-    printf("Digite o sexo do cachorro ou 0 para cancelar: ");
-    gets(campo);
-    if (strcmp(campo, "0") == 0)
+    campo[0] = lerSexo();
+    campo[1] = '\0';
+    if (campo[0] == '0')
         return false;
-    campo[0] = toupper(campo[0]);
-    while (strcmp(campo, "M") && strcmp(campo, "F")){
-        printf("\nERRO: Sexo inexistente!\n");
-        printf("\n(M)asculino ou (F)eminino\n");
-        printf("Digite o sexo do cachorro ou 0 para cancelar: ");
-        gets(campo);
-        if (strcmp(campo, "0") == 0)
-            return false;
-        campo[0] = toupper(campo[0]);
-    }
+
     strcat(buffer, campo);
     strcat(buffer, DELIM);
     campo[0] = '\0';
@@ -262,15 +275,6 @@ bool inserirIndividuo(){
     return true;
 }
 
-void transformaBuffer(char buffer[], CampoRetorno *retorno, int linha){
-    int i;
-    strcpy(retorno->campo[linha][0], strtok(buffer, DELIM));
-    for (i = 1; i < NUM_CAMPO_REG ; ++i){
-        strcpy(retorno->campo[linha][i], strtok(NULL, DELIM));
-    }
-    retorno->tam++;
-}
-
 /*
 * Lê um ID e retorna a posicão no indice ou retorna -1 caso seja cancelado.
 */
@@ -283,7 +287,7 @@ int recuperaPosicaoID(Indice ind, char msg[]){
 
     posicao = buscaBinaria(ind, id);
 
-    while (posicao < 0){
+    while (posicao < 0 || id < 0){
         printf("\nERRO: ID nao existe.\n");
         id = lerInt(msg);
         if (id == 0)
@@ -294,37 +298,39 @@ int recuperaPosicaoID(Indice ind, char msg[]){
     return posicao;
 }
 
-bool buscaID(Indice ind, int posicao, FILE* arquivo, CampoRetorno *retorno, int linha){
+void buscaID(Indice ind, int posicao, FILE* arquivo, CampoRetorno *retorno, char *condicaoSexo){
     short tam_reg;
     char buffer[MAX_TAM_REG] = "";
-
 
     fseek(arquivo, ind.reg[posicao].offset, SEEK_SET);
     fread(&tam_reg, sizeof(tam_reg), 1, arquivo);
     fread(buffer, tam_reg, 1, arquivo);
 
-
-    transformaBuffer(buffer, retorno, linha);
-    return true;
+    int i;
+    strcpy(retorno->campo[retorno->tam][0], strtok(buffer, DELIM));
+    for (i = 1; i < NUM_CAMPO_REG; ++i){
+        strcpy(retorno->campo[retorno->tam][i], strtok(NULL, DELIM));
+    }
+    
+    if (condicaoSexo == NULL || strcmp(retorno->campo[retorno->tam][3], condicaoSexo) == 0)
+        retorno->tam++;
 }
 
-bool buscaLista(Indice ind1, int posicao, ListaI lista, Indice ind2, FILE* arquivo, CampoRetorno *retorno){
+CampoRetorno buscaLista(Indice ind1, int posicao, ListaI lista, Indice ind2, FILE* arquivo, char *condicaoSexo){
+    CampoRetorno retorno;
+    retorno.tam = 0;
     int posicaoLista;
     int chave;
     int posicaoReg;
-    int tamanho = 0;
-    short tam_reg;
-    char buffer[MAX_TAM_REG] = "";
 
     posicaoLista = ind1.reg[posicao].rrn;
 
     while (posicaoLista > -1){
         chave = lista.reg[posicaoLista].chave;
         posicaoReg = buscaBinaria(ind2, chave);
-        buscaID(ind2, posicaoReg, arquivo, retorno, tamanho);
-        tamanho++;
+        buscaID(ind2, posicaoReg, arquivo, &retorno, condicaoSexo);
         posicaoLista = lista.reg[posicaoLista].prox;
     }
 
-    return true;
+    return retorno;
 }

@@ -20,7 +20,10 @@ void clrscr(){
 int lerInt(char msg[]){
     int x;
     printf("%s", msg);
-    scanf("%d", &x);
+    if (scanf("%d", &x) != 1){
+        limpar_stdin();
+        return -1;
+    }
     limpar_stdin();
 
     return x;
