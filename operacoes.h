@@ -27,6 +27,7 @@ struct campo_retorno {
     int tam;
 };
 
+bool salvarEmArquivo();
 bool carregarIndices();
 bool importarArq();
 bool inserirIndividuo();

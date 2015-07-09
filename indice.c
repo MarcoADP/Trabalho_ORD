@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "indice.h"
-#include "arquivos.h"
+#include "arquivo.h"
 
 Indice lerArqIndice(char nomeArquivo[], int tipo){
     FILE* arqIndice;
@@ -12,22 +12,40 @@ Indice lerArqIndice(char nomeArquivo[], int tipo){
     if (arqIndice == NULL)
         return ind;
 
+    if (fscanf(arqIndice, "%s\n", ind.flag_data) != 1){
+        fclose(arqIndice);
+        return ind;
+    }
+
     switch(tipo){
         case TIPO_IP1:
             while (!fimArquivo(arqIndice)){
-                fscanf(arqIndice, "%d %d %d\n", &ind.reg[ind.tam].chave, &ind.reg[ind.tam].offset, &ind.reg[ind.tam].rrn);
+                if (fscanf(arqIndice, "%d %d %d\n", &ind.reg[ind.tam].chave, &ind.reg[ind.tam].offset, &ind.reg[ind.tam].rrn) != 3){
+                    ind.tam = 0;
+                    fclose(arqIndice);
+                    return ind;
+                }
                 ind.tam++;
+                
             }
         break;
         case TIPO_IS2:
             while (!fimArquivo(arqIndice)){
-                fscanf(arqIndice, "%d %d\n", &ind.reg[ind.tam].chave, &ind.reg[ind.tam].rrn);
+                if (fscanf(arqIndice, "%d %d\n", &ind.reg[ind.tam].chave, &ind.reg[ind.tam].rrn) != 2){
+                    ind.tam = 0;
+                    fclose(arqIndice);
+                    return ind;
+                }
                 ind.tam++;
             }
         break;
         case TIPO_IP3:
             while (!fimArquivo(arqIndice)){
-                fscanf(arqIndice, "%d %d\n", &ind.reg[ind.tam].chave, &ind.reg[ind.tam].offset);
+                if (fscanf(arqIndice, "%d %d\n", &ind.reg[ind.tam].chave, &ind.reg[ind.tam].offset) != 2){
+                    ind.tam = 0;
+                    fclose(arqIndice);
+                    return ind;
+                }
                 ind.tam++;
             }
         break;
@@ -42,6 +60,9 @@ void criaArqIndice(Indice ind, char nomeArquivo[], int tipo){
     int i;
     
     arqIndice = abrirArquivo(nomeArquivo, "w");
+
+    fprintf(arqIndice, "%s\n", ind.flag_data);
+
     switch(tipo){
         case TIPO_IP1:
             for (i = 0; i < ind.tam; ++i)

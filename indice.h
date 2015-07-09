@@ -23,8 +23,8 @@ struct reg_indice {
 
 struct indice {
     RegIndice reg[MAX_REG_INDICE];
-    //int flag;
     int tam;
+    char flag_data[20];
 };
 
 struct reg_lista_invertida {

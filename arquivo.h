@@ -1,7 +1,7 @@
-#ifndef ARQUIVOS_H
-#define ARQUIVOS_H 
+#ifndef ARQUIVO_H
+#define ARQUIVO_H 
 
-#include "util.h"
+#include <stdbool.h>
 
 bool fimArquivo(FILE* arq);
 FILE* abrirArquivo(char nomeArquivo[], char modo[]); //nao precisa dessa funcao 

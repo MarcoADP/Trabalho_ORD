@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <time.h>
+#include <string.h>
 #include "util.h"
 
 void limpar_stdin(){
@@ -27,4 +29,12 @@ int lerInt(char msg[]){
     limpar_stdin();
 
     return x;
+}
+
+void obterTempoAtual(char retorno[]){
+    time_t tempo_atual = time(NULL);
+    struct tm *ptm = gmtime(&tempo_atual);
+    char buffer[20];
+    strftime(buffer, sizeof(buffer), "%d/%m/%Y-%H:%M:%S", ptm);
+    strcpy(retorno, buffer);
 }

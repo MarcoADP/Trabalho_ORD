@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "operacoes.h"
 #include "util.h"
-#include "arquivos.h"
+#include "arquivo.h"
 
 void printaIndividuo(CampoRetorno retorno){
     if (retorno.tam == 0){
@@ -143,15 +143,17 @@ void menuBusca(){
 
 void menuPrincipal(){
     int op;
+    int sair;
+    bool arqDesuatalizado = false;
 
-    bool arquivosExistem = carregarIndices();
+    bool arquivosCarregados = carregarIndices();
 
-    if (arquivosExistem){
+    if (arquivosCarregados){
         printf("Arquivos de indices carregados com sucesso.\n");
         printf("Nao e necessario importar arquivos.\n");
     }
     else {
-        printf("ERRO: Arquivos de dados ou de indices não existem.\n");
+        printf("ERRO: Arquivos nao existem ou estao desuatalizados.\n");
         printf("Faca a importacao dos arquivos.\n");
     }
     do {
@@ -161,7 +163,8 @@ void menuPrincipal(){
         printf("(1) - Importar arquivo\n");
         printf("(2) - Inserir individuo\n");
         printf("(3) - Buscar\n");
-        printf("(4) - Sair\n");
+        printf("(4) - Salvar dados em arquivo\n");
+        printf("(5) - Sair\n");
         op = lerInt("\nDigite sua opcao: ");
 
         switch(op){
@@ -169,7 +172,8 @@ void menuPrincipal(){
                 if (importarArq()){
                     clrscr();
                     printf("Arquivos importados e convertidos com sucesso.\n");
-                    arquivosExistem = true;
+                    arquivosCarregados = true;
+                    arqDesuatalizado = true;
                 }
                 else {
                     clrscr();
@@ -177,10 +181,11 @@ void menuPrincipal(){
                 }
                 break;
             case 2:
-                if (arquivosExistem){
+                if (arquivosCarregados){
                     if (inserirIndividuo()){
                         clrscr();
                         printf("Individuo inserido com sucesso.\n");
+                        arqDesuatalizado = true;
                     }
                     else {
                         clrscr();
@@ -189,28 +194,57 @@ void menuPrincipal(){
                 }
                 else {
                     clrscr();
-                    printf("ERRO: Arquivo de individuos ou de racas nao existe.\n");
+                    printf("ERRO: Arquivos nao foram importados.\n");
                     printf("Importe os arquivos antes de inserir.\n");
                 }
                 break;
             case 3:
-                if (arquivosExistem){
+                if (arquivosCarregados){
                     menuBusca();
                     clrscr();
                 }
                 else {
                     clrscr();
-                    printf("ERRO: Arquivo de individuos ou de racas nao existe.\n");
+                    printf("ERRO: Arquivos nao foram importados.\n");
                     printf("Importe os arquivos antes de buscar.\n");
                 }
                 break;
             case 4:
+                if (arquivosCarregados){
+                    if (salvarEmArquivo()){
+                        clrscr();
+                        printf("Arquivos salvos com sucesso.\n");
+                        arqDesuatalizado = false;
+                    }
+                    else {
+                        clrscr();
+                        printf("ERRO: Nao foi possivel salvar dados em arquivos.\n");
+                    }
+                }
+                else {
+                    clrscr();
+                    printf("ERRO: Arquivos nao foram importados.\n");
+                    printf("Importe os arquivos antes de salvar.\n");
+                }
+                break;
+            case 5:
+                if (arqDesuatalizado){
+                    clrscr();
+                    printf("Deseja sair sem salvar dados em arquivo? SIM(1) - NAO(0): \n");
+                    sair = lerInt("");
+                    while (sair != 0 && sair != 1){
+                        printf("ERRO: Opcao invalida\n\n");
+                        sair = lerInt("Informe outro valor: ");
+                    }
+                }
+                else 
+                    sair = 1;
                 break;
             default:
                 clrscr();
                 printf("ERRO: Opcao invalida\n");
         }
-    } while (op != 4);
+    } while (sair != 1);
 }
 
 void iniciar(){
@@ -222,6 +256,7 @@ void iniciar(){
 }
 
 int main(int argc, char const *argv[]){
+    clrscr();
     iniciar();
 
     pressEnter();

@@ -5,11 +5,12 @@
 #include <ctype.h>
 #include "operacoes.h"
 #include "util.h"
-#include "arquivos.h"
+#include "arquivo.h"
 #include "indice.h"
 
 #define DELIM "|"
 #define MAX_TAM_REG 512
+#define TAM_FLAG_DATA 19
 
 Indice ip1;
 Indice is2;
@@ -17,10 +18,40 @@ Indice ip3;
 ListaI listaIP1;
 ListaI listaIS2;
 
+bool salvarEmArquivo(){
+    criaArqIndice(ip1, NOME_ARQ_IP1, TIPO_IP1);
+    criaArqIndice(is2, NOME_ARQ_IS2, TIPO_IS2);
+    criaArqIndice(ip3, NOME_ARQ_IP3, TIPO_IP3);
+    criaArqListaI(listaIP1, NOME_ARQ_LISTAIP1);
+    criaArqListaI(listaIS2, NOME_ARQ_LISTAIS2);
+
+    return true;
+}
+
+bool verificaFlagData(){
+    char data_arq_ind[20] = "";
+    char data_arq_racas[20] = "";
+    FILE* arquivo_ind = fopen(NOME_ARQ_IND, "r");
+    FILE* arquivo_racas = fopen(NOME_ARQ_RACAS, "r");
+    fread(data_arq_ind, TAM_FLAG_DATA, 1, arquivo_ind);
+    fread(data_arq_racas, TAM_FLAG_DATA, 1, arquivo_racas);
+    fclose(arquivo_ind);
+    fclose(arquivo_racas);
+
+    if (strcmp(data_arq_ind, ip1.flag_data) != 0)
+        return false;
+    if (strcmp(data_arq_ind, ip3.flag_data) != 0)
+        return false;
+    if (strcmp(data_arq_racas, is2.flag_data) != 0)
+        return false;
+
+    return true;
+}
+
 bool carregarIndices(){
     if (!arqExiste(NOME_ARQ_IND) || !arqExiste(NOME_ARQ_RACAS))
         return false;
-
+    
     ip1 = lerArqIndice(NOME_ARQ_IP1, TIPO_IP1);
     if (ip1.tam == 0)
         return false;
@@ -41,13 +72,17 @@ bool carregarIndices(){
     if (listaIS2.tam == 0)
         return false;
 
+    if (!verificaFlagData())
+        return false;
+
     return true;
 }
 
 char* lerCampo(FILE* arq){
     char *campo = malloc(MAX_CAMPO * sizeof(char));
     fgets(campo, MAX_CAMPO, arq);
-    campo[strlen(campo) - 1] = '\0';
+    if (strlen(campo) > 1)
+        campo[strlen(campo) - 1] = '\0';
 
     return campo;
 }
@@ -74,11 +109,13 @@ void lerRegIndiceRacas(char* campo[], int byteOffset){
     }
 }
 
-void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* campo[], int byteOffset)){
+void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* campo[], int byteOffset), char tempo_atual[]){
     char* campo[NUM_CAMPO_REG];
     char buffer[MAX_TAM_REG + 1] = "";
     short tam_reg = 0;
-    int byteOffset = 0;
+    int byteOffset = TAM_FLAG_DATA;
+
+    fwrite(tempo_atual, strlen(tempo_atual), 1, saida);
 
     while(!fimArquivo(entrada)){
         strcpy(buffer, ""); //Zera o buffer
@@ -95,7 +132,6 @@ void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* cam
 
         fwrite(&tam_reg, sizeof(tam_reg), 1, saida);
         fwrite(buffer, tam_reg, 1, saida);
-
         lerRegIndice(campo, byteOffset);
 
         byteOffset += tam_reg + sizeof(tam_reg);
@@ -109,6 +145,7 @@ bool importarArq(){
     FILE* arquivoIndividuos, *arquivoRacas, *convertidoIndividuos, *convertidoRacas;
     char nomeArquivoInd[20];
     char nomeArquivoRacas[20];
+    char tempo_atual[50];
 
     do {
         printf("\nDigite o nome do arquivo de INDIVIDUOS ou 0 para cancelar: ");
@@ -135,18 +172,24 @@ bool importarArq(){
     listaIP1.tam = 0;
     listaIS2.tam = 0;
 
-    converterArquivo(arquivoIndividuos, convertidoIndividuos, lerRegIndiceIndividuos);
-    converterArquivo(arquivoRacas, convertidoRacas, lerRegIndiceRacas);
+    obterTempoAtual(tempo_atual);
+
+    converterArquivo(arquivoIndividuos, convertidoIndividuos, lerRegIndiceIndividuos, tempo_atual);
+    converterArquivo(arquivoRacas, convertidoRacas, lerRegIndiceRacas, tempo_atual);
 
     qsort_indice(&ip1);
     qsort_indice(&is2);
     qsort_indice(&ip3);
 
-    criaArqIndice(ip1, NOME_ARQ_IP1, TIPO_IP1);
-    criaArqIndice(is2, NOME_ARQ_IS2, TIPO_IS2);
-    criaArqIndice(ip3, NOME_ARQ_IP3, TIPO_IP3);
-    criaArqListaI(listaIP1, NOME_ARQ_LISTAIP1);
-    criaArqListaI(listaIS2, NOME_ARQ_LISTAIS2);
+    strcpy(ip1.flag_data, tempo_atual);
+    strcpy(is2.flag_data, tempo_atual);
+    strcpy(ip3.flag_data, tempo_atual);
+
+    //criaArqIndice(ip1, NOME_ARQ_IP1, TIPO_IP1);
+    //criaArqIndice(is2, NOME_ARQ_IS2, TIPO_IS2);
+    //criaArqIndice(ip3, NOME_ARQ_IP3, TIPO_IP3);
+    //criaArqListaI(listaIP1, NOME_ARQ_LISTAIP1);
+    //criaArqListaI(listaIS2, NOME_ARQ_LISTAIS2);
 
     fclose(arquivoIndividuos);
     fclose(arquivoRacas);
@@ -182,17 +225,20 @@ bool inserirIndividuo(){
     FILE* arquivo;
     int idi;
     int idr;
-    int posicao;
+    int posicao_idi;
+    int posicao_idr;
     short tam_reg;
     char campo[MAX_CAMPO];
     char buffer[MAX_TAM_REG + 1] = "";
+    char flag_data[20];
+    obterTempoAtual(flag_data);
 
     printf("\nCadastro de cachorros:\n\n");
 
     idi = lerInt("Digite o ID do Cachorro ou 0 para cancelar: ");
     if (idi == 0)
         return false;
-    while((posicao = buscaBinaria(ip3, idi)) > -1 || idi < 0){
+    while((posicao_idi = buscaBinaria(ip3, idi)) > -1 || idi < 0){
         printf("ERRO: O ID eh invalido ou ja existe!\n");
         idi = lerInt("\nDigite outro ID ou 0 para cancelar: ");
         if (idi == 0)
@@ -207,7 +253,7 @@ bool inserirIndividuo(){
     idr = lerInt("\nDigite o ID da raca ou 0 para cancelar: ");
     if (idr == 0)
         return false;
-    while(buscaBinaria(ip1, idr) < 0 || idr < 0){
+    while((posicao_idr = buscaBinaria(ip1, idr)) < 0 || idr < 0){
         printf("ERRO: Nao existe raca com esse id!\n");
         idr = lerInt("\nDigite o ID da raca ou 0 para cancelar: ");
         if (idr == 0)
@@ -245,6 +291,8 @@ bool inserirIndividuo(){
     *   Grava no arquivo de dados
     */
     arquivo = fopen(NOME_ARQ_IND, "r+");
+    fwrite(flag_data, strlen(flag_data), 1, arquivo);
+    
     fseek(arquivo, 0, SEEK_END);
 
     int offset = ftell(arquivo);
@@ -259,19 +307,24 @@ bool inserirIndividuo(){
     *   Insere na posição correta do indice e insere na lista invertida de ip1
     */
     int i;
-    posicao = -(posicao);
-    for (i = ip3.tam; i > posicao; --i)
+    posicao_idi = -(posicao_idi);
+    for (i = ip3.tam; i > posicao_idi; --i)
         ip3.reg[i] = ip3.reg[i-1];
 
-    ip3.reg[posicao].chave = idi;
-    ip3.reg[posicao].offset = offset;
+    ip3.reg[posicao_idi].chave = idi;
+    ip3.reg[posicao_idi].offset = offset;
     ip3.tam++;
 
-    inserirListaI(&listaIP1, idi, idr);
+    bool idr_nao_existe = inserirListaI(&listaIP1, idi, idr);
+    if (idr_nao_existe)
+        ip1.reg[posicao_idr].rrn = atribuiRRN(listaIP1, idr);
 
-    criaArqIndice(ip3, NOME_ARQ_IP3, TIPO_IP3);
-    criaArqListaI(listaIP1, NOME_ARQ_LISTAIP1);
+    /*
+    *   Atualiza flag data
+    */
 
+    strcpy(ip1.flag_data, flag_data);
+    strcpy(ip3.flag_data, flag_data);
     return true;
 }
 
@@ -308,9 +361,8 @@ void buscaID(Indice ind, int posicao, FILE* arquivo, CampoRetorno *retorno, char
 
     int i;
     strcpy(retorno->campo[retorno->tam][0], strtok(buffer, DELIM));
-    for (i = 1; i < NUM_CAMPO_REG; ++i){
+    for (i = 1; i < NUM_CAMPO_REG; ++i)
         strcpy(retorno->campo[retorno->tam][i], strtok(NULL, DELIM));
-    }
     
     if (condicaoSexo == NULL || strcmp(retorno->campo[retorno->tam][3], condicaoSexo) == 0)
         retorno->tam++;
@@ -326,7 +378,7 @@ CampoRetorno buscaLista(Indice ind1, int posicao, ListaI lista, Indice ind2, FIL
     posicaoLista = ind1.reg[posicao].rrn;
 
     while (posicaoLista > -1){
-        chave = lista.reg[posicaoLista].chave;
+        chave = lista.reg[posicaoLista].chave;        
         posicaoReg = buscaBinaria(ind2, chave);
         buscaID(ind2, posicaoReg, arquivo, &retorno, condicaoSexo);
         posicaoLista = lista.reg[posicaoLista].prox;
