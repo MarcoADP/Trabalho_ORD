@@ -140,7 +140,6 @@ void menuBusca(){
     } while (op != 6);
 }
 
-
 void menuPrincipal(){
     int op;
     int sair;

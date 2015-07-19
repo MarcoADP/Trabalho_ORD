@@ -79,8 +79,8 @@ bool carregarIndices(){
 }
 
 char* lerCampo(FILE* arq){
-    char *campo = malloc(MAX_CAMPO * sizeof(char));
-    fgets(campo, MAX_CAMPO, arq);
+    char *campo = malloc(TAM_MAX_CAMPO * sizeof(char));
+    fgets(campo, TAM_MAX_CAMPO, arq);
     if (strlen(campo) > 1)
         campo[strlen(campo) - 1] = '\0';
 
@@ -110,7 +110,7 @@ void lerRegIndiceRacas(char* campo[], int byteOffset){
 }
 
 void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* campo[], int byteOffset), char tempo_atual[]){
-    char* campo[NUM_CAMPO_REG];
+    char* campo[NUM_CAMPO_POR_REG];
     char buffer[MAX_TAM_REG + 1] = "";
     short tam_reg = 0;
     int byteOffset = TAM_FLAG_DATA;
@@ -122,7 +122,7 @@ void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* cam
         tam_reg = 0;
 
         int j;
-        for (j = 0; j < NUM_CAMPO_REG; ++j){
+        for (j = 0; j < NUM_CAMPO_POR_REG; ++j){
             campo[j] = lerCampo(entrada);
             strcat(buffer, campo[j]);
             strcat(buffer, DELIM);
@@ -136,7 +136,7 @@ void converterArquivo(FILE* entrada, FILE* saida, void (*lerRegIndice)(char* cam
 
         byteOffset += tam_reg + sizeof(tam_reg);
         int i;
-        for (i = 0; i < NUM_CAMPO_REG; i++)
+        for (i = 0; i < NUM_CAMPO_POR_REG; i++)
             free(campo[i]);
     }
 }
@@ -145,7 +145,7 @@ bool importarArq(){
     FILE* arquivoIndividuos, *arquivoRacas, *convertidoIndividuos, *convertidoRacas;
     char nomeArquivoInd[20];
     char nomeArquivoRacas[20];
-    char tempo_atual[50];
+    char tempo_atual[20];
 
     do {
         printf("\nDigite o nome do arquivo de INDIVIDUOS ou 0 para cancelar: ");
@@ -228,7 +228,7 @@ bool inserirIndividuo(){
     int posicao_idi;
     int posicao_idr;
     short tam_reg;
-    char campo[MAX_CAMPO];
+    char campo[TAM_MAX_CAMPO];
     char buffer[MAX_TAM_REG + 1] = "";
     char flag_data[20];
     obterTempoAtual(flag_data);
@@ -317,14 +317,14 @@ bool inserirIndividuo(){
 
     bool idr_nao_existe = inserirListaI(&listaIP1, idi, idr);
     if (idr_nao_existe)
-        ip1.reg[posicao_idr].rrn = atribuiRRN(listaIP1, idr);
-
+        ip1.reg[posicao_idr].rrn = listaIP1.tam - 1;
+    
     /*
     *   Atualiza flag data
     */
-
     strcpy(ip1.flag_data, flag_data);
     strcpy(ip3.flag_data, flag_data);
+
     return true;
 }
 
@@ -361,7 +361,7 @@ void buscaID(Indice ind, int posicao, FILE* arquivo, CampoRetorno *retorno, char
 
     int i;
     strcpy(retorno->campo[retorno->tam][0], strtok(buffer, DELIM));
-    for (i = 1; i < NUM_CAMPO_REG; ++i)
+    for (i = 1; i < NUM_CAMPO_POR_REG; ++i)
         strcpy(retorno->campo[retorno->tam][i], strtok(NULL, DELIM));
     
     if (condicaoSexo == NULL || strcmp(retorno->campo[retorno->tam][3], condicaoSexo) == 0)

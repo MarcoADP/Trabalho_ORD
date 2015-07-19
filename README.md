@@ -1,8 +1,3 @@
-# Trabalho_ORD
-Oi joão!
+# Trabalho Organização e Recuperação de Dados
 
-[Praga]
-Se você não ler isso, não vai ter o sexto livro da Crônicas de Gelo e Fogo
-[/Praga]
-
-
+Trabalho para disciplina de Organização e Recuperação de Dados.

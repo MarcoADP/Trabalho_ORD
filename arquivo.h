@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 bool fimArquivo(FILE* arq);
-FILE* abrirArquivo(char nomeArquivo[], char modo[]); //nao precisa dessa funcao 
+FILE* abrirArquivo(char nomeArquivo[], char modo[]);
 bool arqExiste(char nomeArquivo[]);
 
 #endif

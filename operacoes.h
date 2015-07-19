@@ -3,9 +3,9 @@
 
 #include "indice.h"
 
-#define MAX_CAMPO 50
-#define NUM_CAMPO_REG 4
-#define CAMPO_REG 100
+#define TAM_MAX_CAMPO 50
+#define NUM_CAMPO_POR_REG 4
+#define MAX_REG 100
 
 #define NOME_ARQ_IND "convertidoIndividuos.txt"
 #define NOME_ARQ_RACAS "convertidoRacas.txt"
@@ -23,7 +23,7 @@ extern ListaI listaIS2;
 
 typedef struct campo_retorno CampoRetorno;
 struct campo_retorno {
-    char campo[CAMPO_REG][NUM_CAMPO_REG][MAX_CAMPO];
+    char campo[MAX_REG][NUM_CAMPO_POR_REG][TAM_MAX_CAMPO];
     int tam;
 };
 

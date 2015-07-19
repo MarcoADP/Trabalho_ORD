@@ -132,6 +132,9 @@ bool inserirListaI(ListaI* lista, int chave, int chave_sec){
     return (i == -1);
 }
 
+/*
+    dado o parametro chave_primaria, percorre a lista procurando qual RRN se refere a tal chave
+*/
 int atribuiRRN(ListaI lista, int chave_primaria){
     ListaI temp = lista;
     int i, j;
